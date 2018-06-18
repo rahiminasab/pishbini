@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h2 class="text-center jumbotron">Welcome to Pishi!</h2>
+    {% include 'header.html' %}
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="nav-predictions-tab" data-toggle="tab" href="#predictions" role="tab" aria-controls="nav-predictions" aria-selected="true">Predictions</a>
-            <a class="nav-item nav-link" id="nav-scoreboard-tab" data-toggle="tab" href="#scoreboard" role="tab" aria-controls="nav-scoreboard" aria-selected="false">ScoreBoard</a>
+            <a class="nav-item nav-link active"
+               id="nav-predictions-tab"
+               data-toggle="tab"
+               href="#predictions"
+               role="tab"
+               aria-controls="nav-predictions"
+               aria-selected="true"><strong>Predictions</strong></a>
+            <a class="nav-item nav-link"
+               id="nav-scoreboard-tab"
+               data-toggle="tab"
+               href="#scoreboard"
+               role="tab"
+               aria-controls="nav-scoreboard"
+               aria-selected="false"><strong>ScoreBoard</strong></a>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">

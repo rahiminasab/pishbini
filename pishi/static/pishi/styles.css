@@ -6,6 +6,20 @@ li:nth-child(odd) {
     background-color: lightblue;
 }
 
+.user-info-row {
+    margin-top: 2.5em;
+}
+
+.user-info {
+    font-size: x-large;
+    padding-top: 0.4em;
+    color: royalblue;
+}
+
+#nav-tab {
+    font-size: x-large;
+}
+
 .submit-prediction {
     margin-top: 2.1em;
 }

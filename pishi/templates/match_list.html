@@ -1,0 +1,20 @@
+<ul class="list-group match-list">
+    <li class="list-group-item active">
+        <div class="row">
+            <div class="col">
+                <strong>Teams(Home vs Away)</strong>
+            </div>
+            <div class="col">
+                <strong>Result</strong>
+            </div>
+            <div class="col">
+                <strong>Your Prediction</strong>
+            </div>
+        </div>
+    </li>
+    {% for pair in pairs %}
+        <li class="list-group-item {% if pair.1 or pair.0.finished %}disabled {% endif %}">
+            {% include 'match.html' with match=pair.0 predict=pair.1 %}
+        </li>
+    {% endfor %}
+</ul>

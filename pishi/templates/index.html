@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h2 class="text-center jumbotron">Welcome to Pishi!</h2>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-predictions-tab" data-toggle="tab" href="#predictions" role="tab" aria-controls="nav-predictions" aria-selected="true">Predictions</a>
+            <a class="nav-item nav-link" id="nav-scoreboard-tab" data-toggle="tab" href="#scoreboard" role="tab" aria-controls="nav-scoreboard" aria-selected="false">ScoreBoard</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div id="predictions" class="tab-pain fade show active" role="tabpanel" aria-labelledby="nav-predictions-tab">
+            {% include 'match_list.html' %}
+        </div>
+        <div id="scoreboard" class="tab-pain fade" role="tabpanel" aria-labelledby="nav-scoreboard-tab">
+            <img class="img-fluid" src="{% static 'pishi/images/under_const.jpg' %}">
+        </div>
+    </div>
+
+{% endblock %}

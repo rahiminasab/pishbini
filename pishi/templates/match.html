@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col">
+     <strong>{{ match }}</strong>
+    </div>
+    <div class="col">
+        {% if match.finished %}
+            {{ match.home_result }}-{{ match.away_result }}
+            {% if match.home_penalty %}
+                (penalty: {{ match.home_penalty }}-{{ match.away.penalty }})
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col">
+        {% include 'predict_column.html' with match=match predict=predict %}
+    </div>
+</div>

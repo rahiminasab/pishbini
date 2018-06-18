@@ -1,0 +1,15 @@
+li {
+    background-color: aliceblue;
+}
+
+li:nth-child(odd) {
+    background-color: lightblue;
+}
+
+.submit-prediction {
+    margin-top: 2.1em;
+}
+
+.match-list {
+    margin-top: 0.5em;
+}

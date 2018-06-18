@@ -1,7 +1,11 @@
 {% load tz %}
 <div class="row">
     <div class="col-5">
-        <p><strong>{{ match }}</strong></p>
+        <p><strong>
+            <img src="{{ match.home_team.flag }}" class="img-fluid team-flag">{{ match.home_team }}
+            vs
+            <img src="{{ match.away_team.flag }}" class="img-fluid team-flag">{{ match.away_team }}
+        </strong></p>
         <p>({{ match.date | localtime | date:"D d M, h:i A" }})</p>
     </div>
     <div class="col">

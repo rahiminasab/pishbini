@@ -27,3 +27,7 @@ li:nth-child(odd) {
 .match-list {
     margin-top: 0.5em;
 }
+
+.team-flag {
+    max-width: 25px;
+}

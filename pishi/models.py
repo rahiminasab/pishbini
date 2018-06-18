@@ -40,7 +40,7 @@ class Match(models.Model):
 
 class Predict(models.Model):
     user = models.ForeignKey(User, related_name="predictions", on_delete=models.CASCADE)
-    match = models.OneToOneField(Match, on_delete=models.CASCADE)
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
     home_result_predict = models.PositiveIntegerField()
     away_result_predict = models.PositiveIntegerField()
     home_penalty_predict = models.PositiveIntegerField(null=True, blank=True)

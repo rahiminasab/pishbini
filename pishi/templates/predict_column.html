@@ -3,7 +3,7 @@
     {% if predict.home_penalty_predict %}
         (penalty: {{ predict.home_penalty_predict }}-{{ predict.away_penalty_predict }})
     {% endif %}
-{% elif not match.finished %}
+{% elif not match.due %}
     <form class="predict-form">
         {% csrf_token %}
         <div class="form-row">

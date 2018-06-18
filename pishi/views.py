@@ -54,6 +54,10 @@ def submit_prediction(request):
 
     user = request.user
     match = Match.objects.get(pk=request.POST["match_pk"])
+
+    if match.due:
+        return HttpResponseNotAllowed("Hey you can't predict a match after it is started")
+
     predict = Predict.objects.create(user=user,
                                      match=match,
                                      home_result_predict=request.POST["home_r"],

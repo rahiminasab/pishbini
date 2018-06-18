@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import datetime
+import pytz
+
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
@@ -33,6 +36,11 @@ class Match(models.Model):
     home_penalty = models.PositiveIntegerField(null=True, blank=True)
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     finished = models.BooleanField(default=False)
+    is_past = False
+
+    @property
+    def due(self):
+        return datetime.now(pytz.UTC) >= self.date
 
     def __unicode__(self):
         return "%s vs %s"%(self.home_team, self.away_team)
@@ -47,4 +55,4 @@ class Predict(models.Model):
     away_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s-%s"%(self.home_result_predict, self.away_result_predict)
+        return "%s-%s: %s-%s"%(self.user, self.match, self.home_result_predict, self.away_result_predict)

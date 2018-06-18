@@ -13,7 +13,7 @@
         </div>
     </li>
     {% for pair in pairs %}
-        <li class="list-group-item {% if pair.1 or pair.0.finished %}disabled {% endif %}">
+        <li class="list-group-item {% if pair.1 or pair.0.due %}disabled {% endif %}">
             {% include 'match.html' with match=pair.0 predict=pair.1 %}
         </li>
     {% endfor %}

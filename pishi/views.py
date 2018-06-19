@@ -75,7 +75,7 @@ def submit_prediction(request):
 
 
 def refresh_scoreboard():
-    users = User.objects.all()
+    users = User.objects.filter(is_staff=False)
     for user in users:
         try:
             last_time_calculated = user.score.last_time_calculated

@@ -11,6 +11,20 @@ li:nth-child(odd) {
     margin-bottom: 20px;
 }
 
+/*--------------------------*/
+
+/* header stuff*/
+
+.header-nav {
+    background-color: #5899c7!important;
+}
+
+.logo {
+    max-width: 80px;
+}
+
+
+
 .user-info-row {
     margin-top: 2.5em;
 }

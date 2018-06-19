@@ -66,6 +66,9 @@ class Predict(models.Model):
     home_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
     away_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
 
+    class Meta:
+        unique_together = ('user', 'match',)
+
     def winner(self):
         if self.home_result_predict > self.away_result_predict:
             return self.match.home_team

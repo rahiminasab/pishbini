@@ -14,6 +14,11 @@ class PredictAdmin(admin.ModelAdmin):
     pass
 
 
+class ScoreAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Predict, PredictAdmin)
+admin.site.register(Score, ScoreAdmin)

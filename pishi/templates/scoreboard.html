@@ -1,0 +1,24 @@
+<ul class="list-group">
+        <li class="list-group-item active sticky-top">
+            <div class="row">
+                <div class="col-1"><strong>#</strong></div>
+                <div class="col">
+                    <strong>Name</strong>
+                </div>
+                <div class="col">
+                    <strong>score</strong>
+                </div>
+            </div>
+        </li>
+    {% for score in scores %}
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-1">{{ forloop.counter }}</div>
+                <div class="col">
+                    {{ score.user.get_full_name|default:score.user.username }}
+                </div>
+                <div class="col">{{ score.value }}</div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

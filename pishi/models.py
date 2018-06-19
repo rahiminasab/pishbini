@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 from datetime import datetime
 import pytz
@@ -42,6 +43,17 @@ class Match(models.Model):
     def due(self):
         return datetime.now(pytz.UTC) >= self.date
 
+    def winner(self):
+        if self.home_result > self.away_result:
+            return self.home_team
+        elif self.home_result == self.away_result == 0:
+            if self.home_penalty > self.away_penalty:
+                return self.home_team
+            else:
+                return self.away_team
+        else:
+            return self.away_team
+
     def __unicode__(self):
         return "%s vs %s"%(self.home_team, self.away_team)
 
@@ -54,5 +66,46 @@ class Predict(models.Model):
     home_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
     away_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
 
+    def winner(self):
+        if self.home_result_predict > self.away_result_predict:
+            return self.match.home_team
+        elif self.home_result_predict == self.away_result_predict == 0:
+            if self.home_penalty_predict > self.away_penalty_predict:
+                return self.match.home_team
+            else:
+                return self.match.away_team
+        else:
+            return self.match.away_team
+
+    def value(self):
+        if not self.match.finished:
+            return 0
+        val = 0
+        if self.home_result_predict == self.match.home_result and self.away_result_predict == self.match.away_result:
+            val += 20
+        elif self.winner() == self.match.winner():
+            val += 5
+            if self.home_result_predict-self.away_result_predict == self.match.home_result-self.match.away_result:
+                val += 8
+        return val
+
+
+
     def __unicode__(self):
         return "%s-%s: %s-%s"%(self.user, self.match, self.home_result_predict, self.away_result_predict)
+
+
+class Score(models.Model):
+    user = models.OneToOneField(User, related_name="score", on_delete=models.CASCADE)
+    value = models.FloatField()
+    last_time_calculated = models.DateTimeField(auto_now_add=True)
+
+    def calc(self):
+        predictions = self.user.predictions.all()
+        score = 0
+        for prediction in predictions:
+            score += prediction.value()
+        return score
+
+    def __unicode__(self):
+        return "%s: %s" % (self.user, self.value)

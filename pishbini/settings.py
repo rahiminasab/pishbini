@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'uwo9anx&es*3@4glqp##c=3_3hw#am=h5_58wzy3l#rn__bp2*'
+SECRET_KEY = os.environ['DJANGO_PISHI_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rahiminasab.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pishi'
+    'pishi',
+    'celery'
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CELERY_BROKER_URL = 'sqs://' + os.getenv('AWS_ACCESS_KEY') + ':' + os.getenv('AWS_SECRET_KEY') + '@'
 
 
 # Internationalization

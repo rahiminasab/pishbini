@@ -6,6 +6,11 @@ li:nth-child(odd) {
     background-color: lightblue;
 }
 
+/*login stuff*/
+.loginbox {
+    margin-bottom: 20px;
+}
+
 .user-info-row {
     margin-top: 2.5em;
 }

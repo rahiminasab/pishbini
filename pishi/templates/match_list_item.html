@@ -1,33 +1,84 @@
 {% load tz %}
-<div class="row">
-    <div class="col">
+<div class="row justify-content-center">
 
-        <p>
-            <strong>{{ match.home_team }}<img src="{{ match.home_team.flag }}" class="img-fluid team-flag"></strong> vs
-            <strong>{{ match.away_team }}<img src="{{ match.away_team.flag }}" class="img-fluid team-flag"></strong>
-        </p>
-        <p>{{ match.date | localtime | date:"D d M, h:i A" }}</p>
+    <div class="col-9 col-md-8 col-xl-9">
+        {#  flags row  #}
+        <div class="row">
+            <div class="col-5">
+                <img src="{{ match.home_team.flag }}" class="img-fluid team-flag">
+            </div>
+            <div class="col-2"></div>
+            <div class="col-5">
+                <img src="{{ match.away_team.flag }}" class="img-fluid team-flag">
+            </div>
+        </div>
+        {#  team names row  #}
+        <div class="row match-list-item-info">
+            <div class="col-5">
+                <strong>{{ match.home_team }}</strong>
+            </div>
+            <div class="col-2"><small>vs</small></div>
+            <div class="col-5">
+                <strong>{{ match.away_team }}</strong>
+            </div>
+        </div>
+        {#  actual scores row  #}
+        {% if match.finished %}
+            <div class="row match-list-item-info actual-scores-row">
+                <div class="col-5">
+                    {{ match.home_result }}
+                    {% if match.home_penalty %}
+                        ({{ match.home_penalty }})
+                    {% endif %}
+                </div>
+                <div class="col-2"><small><i class="fas fa-futbol"></i></small></div>
+                <div class="col-5">
+                    {{ match.away_result }}
+                    {% if match.away_penalty %}
+                        ({{ match.away_penalty }})
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        {#  date row  #}
+        <div class="row match-list-item-info {% if predict %}last-match-info{% endif %}">
+            <div class="col"><small>{{ match.date | localtime | date:"D d M, h:i A" }}</small></div>
+        </div>
+        {#  predict input row  #}
+        {% if not match.due and not match.finished and not predict %}
+            <div class="row match-list-item-info predict-btn-row">
+                <div class="col">
+                    <button class="btn btn-primary btn-sm predict-btn">predict</button>
+                </div>
+            </div>
+            <div style="display: none"  class="row match-list-item-info predict-form-row">
+                <div class="col">
+                    {% include 'predict_form.html' with match=match %}
+                </div>
+            </div>
+        {% endif %}
+        {#  predict info row  #}
+        {% if predict %}
+            <div class="row">
+                <div class="col badge badge-warning">
+                   predicted
+                </div>
+            </div>
+            <div class="row match-list-item-info predicted-scores-row">
+                <div class="col-5">
+                    {{ predict.home_result_predict }}
+                    {% if predict.home_penalty_predict %}
+                        ({{ predict.home_penalty_predict }})
+                    {% endif %}
+                </div>
+                <div class="col-2"><i class="fas fa-paw"></i></div>
+                <div class="col-5">
+                    {{ predict.away_result_predict }}
+                    {% if predict.away_penalty_predict %}
+                        ({{ predict.away_penalty_predict }})
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
     </div>
-{#    {% if not predict and not match.due and not match.finished %}#}
-{#        <div class="col justify-content-end d-flex">#}
-{#            {% include 'predict_form.html' with match=match predict=predict %}#}
-{#        </div>#}
-{#    {% else %}#}
-{#        {% if predict %}#}
-{#            <div class="col">#}
-{#                <b>{{ predict.home_result_predict }}-{{ predict.away_result_predict }}</b>#}
-{#                {% if predict.home_penalty_predict %}#}
-{#                    (penalty: {{ predict.home_penalty_predict }}-{{ predict.away_penalty_predict }})#}
-{#                {% endif %}#}
-{#            </div>#}
-{#        {% endif %}#}
-{#        {% if match.finished %}#}
-{#            <div class="col">#}
-{#                {{ match.home_result }}-{{ match.away_result }}#}
-{#                {% if match.home_penalty %}#}
-{#                    (penalty: {{ match.home_penalty }}-{{ match.away.penalty }})#}
-{#                {% endif %}#}
-{#            </div>#}
-{#        {% endif %}#}
-{#    {% endif %}#}
 </div>

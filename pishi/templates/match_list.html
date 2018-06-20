@@ -3,7 +3,7 @@
         <strong>Fifa 2018 Matches</strong>
     </li>
     {% for pair in pairs %}
-        <li class="list-group-item d-flex justify-content-center text-center">
+        <li class="list-group-item text-center">
             {% include 'match_list_item.html' with match=pair.0 predict=pair.1 %}
         </li>
     {% endfor %}

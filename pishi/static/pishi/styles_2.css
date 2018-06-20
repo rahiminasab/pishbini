@@ -8,7 +8,7 @@ li {
 }
 
 li:nth-child(odd) {
-    background-color: lightblue;
+    background-color: #eff0f1;
 }
 
 /*login stuff*/
@@ -46,19 +46,25 @@ li:nth-child(odd) {
 
 .team-flag {
     max-width: 25px;
-    padding-bottom: 1.5em;
 }
 
-.predict-submit-button{
-    background-color: Transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
+.match-list-item-info {
+    margin-bottom: 10px;
 }
-.predict-submit-icon {
-    cursor: pointer;
-    color: #11b75b;
+
+.actual-scores-row {
     font-size: x-large;
+}
+
+.last-match-info {
+    border-bottom: 1px black solid;
+    margin-bottom: 15px;
+}
+
+.predicted-scores-row {
+    background-color: #f9c83f4f;
+}
+
+.predict-submit-btns-row {
+    margin-top: 10px;
 }

@@ -1,30 +1,43 @@
-<form class="predict-form">
+<form class="predict-form" method="post">
     {% csrf_token %}
-    <div class="form-row">
-        <div class="col">
-{#                <label class="col-form-label col-form-label-sm" for="home_result_predict">Home Score</label>#}
-            <input id="home_result_predict" placeholder="{{ match.home_team.fifa_code | upper }}" class="form-control form-control-sm" type="number" name="home_result_predict" required>
+    <input class="match_pk" type="hidden" value="{{ match.pk }}">
+    <input class="match_type" type="hidden" value="{{ match.type }}">
+    <div class="row">
+        <div class="col-5">
+            <input placeholder="{{ match.home_team.fifa_code | upper }}"
+                   class="form-control form-control-sm home_result_prediction"
+                   type="number"
+                   name="home_result_prediction" required>
         </div>
-        -
-        <div class="col">
-{#                <label class="col-form-label col-form-label-sm" for="away_result_predict">Away Score</label>#}
-            <input id="away_result_predict" placeholder="{{ match.away_team.fifa_code | upper }}" class="form-control form-control-sm" type="number" name="away_result_predict" required>
+        <div class="col-2">-</div>
+        <div class="col-5">
+            <input placeholder="{{ match.away_team.fifa_code | upper }}"
+                   class="form-control form-control-sm away_result_prediction"
+                   type="number"
+                   name="away_result_prediction" required>
         </div>
-        <input id="match_pk" type="hidden" value="{{ match.pk }}">
-        <input id="match_type" type="hidden" value="{{ match.type }}">
-        {% if match.type == 1 %}
-            <div class="home-penalty-input col" hidden>
-                <label class="col-form-label col-form-label-sm" for="home_penalty_predict">Home Penalty</label>
-                <input id="home_penalty_predict" class="form-control form-control-sm" type="number" >
+    </div>
+    {% if match.type != 0 %}
+        <div class="row penalty-predict-row" hidden>
+            <div class="col-5">
+                <input placeholder="penalty"
+                       class="form-control form-control-sm home_penalty_prediction"
+                       type="number"
+                       name="home_penalty_prediction">
             </div>
-            <div class="away-penalty-input col" hidden>
-                <label class="col-form-label col-form-label-sm" for="away_penalty_predict">Away Penalty</label>
-                <input id="away_penalty_predict" class="form-control form-control-sm" type="number" >
+            <div class="col-2">-</div>
+            <div class="col-5">
+                <input placeholder="penalty"
+                       class="form-control form-control-sm away_penalty_prediction"
+                       type="number"
+                       name="away_penalty_predict">
             </div>
-        {% endif %}
+        </div>
+    {% endif %}
+    <div class="row predict-submit-btns-row">
         <div class="col">
-            <button class="predict-submit-button" type="submit"><i class="fas fa-check predict-submit-icon"></i></button>
-{#                <button class="btn btn-success btn-sm submit-prediction" type="submit">Predict</button>#}
+            <button class="btn btn-success btn-sm" type="submit">submit</button>
+            <button class="btn btn-danger btn-sm predict-cancel-button" type="reset">cancel</button>
         </div>
     </div>
 </form>

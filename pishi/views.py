@@ -61,7 +61,10 @@ def submit_prediction(request):
     match = Match.objects.get(pk=request.POST["match_pk"])
 
     if match.due:
-        return HttpResponseNotAllowed("Hey you can't predict a match after it is started")
+        return HttpResponseNotAllowed("Hey you can't predict a match after it is started!")
+
+    if user.predictions.filter(match=match):
+        return HttpResponseNotAllowed("Hey you can't predict a match twice!")
 
     predict = Predict.objects.create(user=user,
                                      match=match,
@@ -71,7 +74,7 @@ def submit_prediction(request):
                                      away_penalty_predict=request.POST["away_p"] if "away_p" in request.POST else None)
 
     data = {"match": match, "predict": predict}
-    return render(request, 'match.html', data)
+    return render(request, 'match_list_item.html', data)
 
 
 def refresh_scoreboard():

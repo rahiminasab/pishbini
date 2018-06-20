@@ -1,11 +1,16 @@
 {% load static %}
-<nav class="navbar header-nav">
+
+<div class="row justify-content-center">
+    <nav class="navbar header-nav col-lg-7">
         <img class="navbar-brand logo" src="{% static 'pishi/images/kitten.png' %}" alt="pishi">
-        {% if LOGGED_IN %}
+        {% if user.is_authenticated %}
             <a class="float-right btn btn-danger"  href="{% url 'logout' %}">Logout</a>
         {% endif %}
-</nav>
-<div class="jumbotron">
-    <h1 class="display-4 text-center">Welcome to Pishi!</h1>
-    <p class="lead text-center">Try to have the best prediction of match results and win an invaluable prize.</p>
+    </nav>
+</div>
+<div class="row justify-content-center">
+    <div class="jumbotron col-lg-7">
+        <h1 class="display-4 text-center">Welcome to Pishi!</h1>
+        <p class="lead text-center">Try to have the best prediction of match results and win an invaluable prize.</p>
+    </div>
 </div>

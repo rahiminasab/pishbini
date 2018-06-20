@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    {% include 'header.html' with LOGGED_IN='1' %}
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <nav class="row justify-content-center">
+        <div class="nav nav-tabs col-lg-7" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active"
                id="nav-predictions-tab"
                data-toggle="tab"
                href="#predictions"
                role="tab"
                aria-controls="nav-predictions"
-               aria-selected="true">Predictions</a>
+               aria-selected="true">Plays</a>
             <a class="nav-item nav-link"
                id="nav-scoreboard-tab"
                data-toggle="tab"
@@ -20,11 +19,11 @@
                aria-selected="false">ScoreBoard</a>
         </div>
     </nav>
-    <div class="tab-content" id="nav-tabContent">
-        <div id="predictions" class="tab-pain fade show active" role="tabpanel" aria-labelledby="nav-predictions-tab">
+    <div class="tab-content row justify-content-center" id="nav-tabContent">
+        <div id="predictions" class="tab-pain fade show active col-lg-7" role="tabpanel" aria-labelledby="nav-predictions-tab">
             {% include 'match_list.html' %}
         </div>
-        <div style="display: none" id="scoreboard" class="tab-pain fade" role="tabpanel" aria-labelledby="nav-scoreboard-tab">
+        <div style="display: none" id="scoreboard" class="tab-pain fade col col-lg-7" role="tabpanel" aria-labelledby="nav-scoreboard-tab">
             {% include 'scoreboard.html' %}
         </div>
     </div>

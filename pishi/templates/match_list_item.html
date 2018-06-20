@@ -1,0 +1,33 @@
+{% load tz %}
+<div class="row">
+    <div class="col">
+
+        <p>
+            <strong>{{ match.home_team }}<img src="{{ match.home_team.flag }}" class="img-fluid team-flag"></strong> vs
+            <strong>{{ match.away_team }}<img src="{{ match.away_team.flag }}" class="img-fluid team-flag"></strong>
+        </p>
+        <p>{{ match.date | localtime | date:"D d M, h:i A" }}</p>
+    </div>
+{#    {% if not predict and not match.due and not match.finished %}#}
+{#        <div class="col justify-content-end d-flex">#}
+{#            {% include 'predict_form.html' with match=match predict=predict %}#}
+{#        </div>#}
+{#    {% else %}#}
+{#        {% if predict %}#}
+{#            <div class="col">#}
+{#                <b>{{ predict.home_result_predict }}-{{ predict.away_result_predict }}</b>#}
+{#                {% if predict.home_penalty_predict %}#}
+{#                    (penalty: {{ predict.home_penalty_predict }}-{{ predict.away_penalty_predict }})#}
+{#                {% endif %}#}
+{#            </div>#}
+{#        {% endif %}#}
+{#        {% if match.finished %}#}
+{#            <div class="col">#}
+{#                {{ match.home_result }}-{{ match.away_result }}#}
+{#                {% if match.home_penalty %}#}
+{#                    (penalty: {{ match.home_penalty }}-{{ match.away.penalty }})#}
+{#                {% endif %}#}
+{#            </div>#}
+{#        {% endif %}#}
+{#    {% endif %}#}
+</div>

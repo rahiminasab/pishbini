@@ -14,7 +14,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'pishi/styles_1.css' %}">
 </head>
 <body>
-    <header></header>
+    <header>
+        {% include 'header.html' %}
+    </header>
     <main>
         <div class="container-fluid">
             {% block content %}

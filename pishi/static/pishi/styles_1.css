@@ -1,3 +1,8 @@
+body {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
 li {
     background-color: aliceblue;
 }
@@ -7,6 +12,7 @@ li:nth-child(odd) {
 }
 
 /*login stuff*/
+
 .loginbox {
     margin-bottom: 20px;
 }
@@ -22,31 +28,37 @@ li:nth-child(odd) {
 .logo {
     max-width: 80px;
 }
-
-
-
-.user-info-row {
-    margin-top: 2.5em;
-}
-
-.user-info {
-    font-size: x-large;
-    padding-top: 0.4em;
-    color: royalblue;
-}
+/*--------------------------*/
 
 #nav-tab {
-    font-size: x-large;
+    font-size: 1.2em;
 }
 
 .submit-prediction {
     margin-top: 2.1em;
 }
 
-.match-list {
+.tab-pain {
     margin-top: 0.5em;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .team-flag {
     max-width: 25px;
+    padding-bottom: 1.5em;
+}
+
+.predict-submit-button{
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+.predict-submit-icon {
+    cursor: pointer;
+    color: #11b75b;
+    font-size: x-large;
 }

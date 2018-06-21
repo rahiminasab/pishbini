@@ -72,3 +72,20 @@ li:nth-child(odd) {
 .predict-edit-btn {
     background-color: #ec9573;
 }
+
+
+.scoreboard_position_1 {
+    background-color: gold!important;
+}
+
+.scoreboard_position_2 {
+    background-color: silver!important;
+}
+
+.scoreboard_position_3 {
+    background-color: #A67D3D!important;
+}
+
+.scoreboard-badge {
+    font-size: x-large;
+}

@@ -33,7 +33,7 @@
         btnRow.siblings('.predict-form-row').show();
     });
 
-    $(document.body).on('click', '.predict-cancel-button', function () {
+    $(document.body).on('click', '.predict-add-cancel-button', function () {
         let formRow = $(this).closest('.predict-form-row');
         formRow.hide();
         formRow.siblings('.predict-btn-row').show();
@@ -72,6 +72,21 @@
             .done(function (result) {
                 parent_li.html(result);
             })
+    });
+
+    $(document.body).on('click', '.predict-edit-btn', function () {
+        let parentRow = $(this).closest('.predict-edit-btn-row');
+        parentRow.hide();
+        parentRow.siblings('.predicted-info-div').hide();
+        parentRow.siblings('.predict-form-row').show();
+
+    });
+
+    $(document.body).on('click', '.predict-edit-cancel-button', function () {
+        let parentRow = $(this).closest('.predict-form-row');
+        parentRow.siblings('.predicted-info-div').show();
+        parentRow.siblings('.predict-edit-btn-row').show();
+        parentRow.hide();
     });
 
     $.ajaxSetup({

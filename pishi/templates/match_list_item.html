@@ -53,32 +53,48 @@
             </div>
             <div style="display: none"  class="row match-list-item-info predict-form-row">
                 <div class="col">
-                    {% include 'predict_form.html' with match=match %}
+                    {% include 'predict_form.html' with match=match cancel_btn_class="predict-add-cancel-button" %}
                 </div>
             </div>
         {% endif %}
         {#  predict info row  #}
         {% if predict %}
-            <div class="row">
-                <div class="col badge badge-warning">
-                   predicted
+            <div class="predicted-info-div">
+                <div class="row">
+                    <div class="col badge badge-warning">
+                       predicted
+                    </div>
+                </div>
+                <div class="row match-list-item-info predicted-scores-row">
+                    <div class="col-5">
+                        {{ predict.home_result_predict }}
+                        {% if predict.home_penalty_predict %}
+                            ({{ predict.home_penalty_predict }})
+                        {% endif %}
+                    </div>
+                    <div class="col-2">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div class="col-5">
+                        {{ predict.away_result_predict }}
+                        {% if predict.away_penalty_predict %}
+                            ({{ predict.away_penalty_predict }})
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-            <div class="row match-list-item-info predicted-scores-row">
-                <div class="col-5">
-                    {{ predict.home_result_predict }}
-                    {% if predict.home_penalty_predict %}
-                        ({{ predict.home_penalty_predict }})
-                    {% endif %}
+            {% if not match.due %}
+                <div class="row predict-edit-btn-row">
+                    <div class="col">
+                       <button class="btn btn-sm predict-edit-btn">edit</button>
+                    </div>
                 </div>
-                <div class="col-2"><i class="fas fa-paw"></i></div>
-                <div class="col-5">
-                    {{ predict.away_result_predict }}
-                    {% if predict.away_penalty_predict %}
-                        ({{ predict.away_penalty_predict }})
-                    {% endif %}
+                <div style="display: none"  class="row match-list-item-info predict-form-row">
+                    <div class="col">
+                        {% include 'predict_form.html' with match=match predict=predict cancel_btn_class="predict-edit-cancel-button" %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         {% endif %}
     </div>
 </div>

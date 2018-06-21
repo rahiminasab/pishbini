@@ -60,20 +60,24 @@ def submit_prediction(request):
     user = request.user
     match = Match.objects.get(pk=request.POST["match_pk"])
 
-    if match.due:
+    if match.due or match.finished:
         return HttpResponseNotAllowed("Hey you can't predict a match after it is started!")
 
-    if user.predictions.filter(match=match):
-        return HttpResponseNotAllowed("Hey you can't predict a match twice!")
-
-    predict = Predict.objects.create(user=user,
-                                     match=match,
-                                     home_result_predict=request.POST["home_r"],
-                                     away_result_predict=request.POST["away_r"],
-                                     home_penalty_predict=request.POST["home_p"] if "home_p" in request.POST else None,
-                                     away_penalty_predict=request.POST["away_p"] if "away_p" in request.POST else None)
-
-    data = {"match": match, "predict": predict}
+    try:
+        prediction = user.predictions.get(match=match)
+        prediction.home_result_predict = request.POST["home_r"]
+        prediction.away_result_predict = request.POST["away_r"]
+        prediction.home_penalty_predict = request.POST["home_p"] if "home_p" in request.POST else None
+        prediction.away_penalty_predict = request.POST["away_p"] if "away_p" in request.POST else None
+        prediction.save()
+    except Predict.DoesNotExist:
+        prediction = Predict.objects.create(user=user,
+                                            match=match,
+                                            home_result_predict=request.POST["home_r"],
+                                            away_result_predict=request.POST["away_r"],
+                                            home_penalty_predict=request.POST["home_p"] if "home_p" in request.POST else None,
+                                            away_penalty_predict=request.POST["away_p"] if "away_p" in request.POST else None)
+    data = {"match": match, "predict": prediction}
     return render(request, 'match_list_item.html', data)
 
 

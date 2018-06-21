@@ -7,6 +7,7 @@
             <input placeholder="{{ match.home_team.fifa_code | upper }}"
                    class="form-control form-control-sm home_result_prediction"
                    type="number"
+                   value="{{ predict.home_result_predict }}"
                    name="home_result_prediction" required>
         </div>
         <div class="col-2">-</div>
@@ -14,15 +15,17 @@
             <input placeholder="{{ match.away_team.fifa_code | upper }}"
                    class="form-control form-control-sm away_result_prediction"
                    type="number"
+                   value="{{ predict.away_result_predict }}"
                    name="away_result_prediction" required>
         </div>
     </div>
     {% if match.type != 0 %}
-        <div class="row penalty-predict-row" hidden>
+        <div class="row penalty-predict-row" {% if not predict.home_penalty_predict %} hidden {% endif %}>
             <div class="col-5">
                 <input placeholder="penalty"
                        class="form-control form-control-sm home_penalty_prediction"
                        type="number"
+                       value="{% if predict.home_penalty_predict %}{{ predict.home_penalty_predict }}{% endif %}"
                        name="home_penalty_prediction">
             </div>
             <div class="col-2">-</div>
@@ -30,6 +33,7 @@
                 <input placeholder="penalty"
                        class="form-control form-control-sm away_penalty_prediction"
                        type="number"
+                       value="{% if predict.away_penalty_predict %}{{ predict.away_penalty_predict }}{% endif %}"
                        name="away_penalty_predict">
             </div>
         </div>
@@ -37,7 +41,7 @@
     <div class="row predict-submit-btns-row">
         <div class="col">
             <button class="btn btn-success btn-sm" type="submit">submit</button>
-            <button class="btn btn-danger btn-sm predict-cancel-button" type="reset">cancel</button>
+            <button class="btn btn-danger btn-sm {{ cancel_btn_class }}" type="reset">cancel</button>
         </div>
     </div>
 </form>

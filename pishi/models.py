@@ -114,25 +114,29 @@ class Predict(models.Model):
             return self.match.away_team
 
     def value(self):
+        def is_royal_flush():
+            if self.home_result_predict == self.match.home_result and self.away_result_predict == self.match.away_result:
+                if self.match.home_penalty:
+                    return self.home_penalty_predict == self.match.home_penalty
+                return True
+            return False
+
+        def is_full_house():
+            return self.home_result_predict-self.away_result_predict == self.match.home_result-self.match.away_result
+
         if not self.match.finished:
             return 0
-        val = 0
-        if self.winner == self.match.winner:
-            val += 5
-            if self.home_result_predict == 0 and self.away_result_predict == 0 and self.match.type > Match.GROUP:
-                if self.match.winner == self.match.home_team:
-                    val += 5 - abs(self.match.home_penalty - self.home_penalty_predict)
-                else:
-                    val += 5 - abs(self.match.away_penalty - self.away_penalty_predict)
-            elif self.home_result_predict - self.away_result_predict == self.match.home_result - self.match.away_result:
-                val += 5
-        if self.home_result_predict == self.match.home_result:
-            val += 5
-        if self.away_result_predict == self.match.away_result:
-            val += 5
 
         if self.winner == self.match.winner:
+            if is_royal_flush():
+                val = 20
+            elif is_full_house():
+                val = 12
+            else:
+                val = 8
             val += self.match.rare_extra
+        else:
+            val = 2
 
         return val
 

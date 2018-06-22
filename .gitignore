@@ -9,3 +9,4 @@ __pycache__/
 
 pishi/migrations/
 local_settings.py
+pishi/fixtures/db*

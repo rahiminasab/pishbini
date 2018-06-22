@@ -27,3 +27,12 @@ urlpatterns = [
     url(r'^home/$', core_views.home, name='home'),
     url(r'^predict/', core_views.submit_prediction, name='submit_prediction')
 ]
+
+from pishi.models import *
+
+for predict in Predict.objects.all():
+    predict.save()
+for match in Match.objects.all():
+    match.save()
+
+

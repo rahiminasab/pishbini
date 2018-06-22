@@ -3,8 +3,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed
 
-from datetime import timedelta
-
 from models import *
 from forms import SignUpForm
 
@@ -47,8 +45,7 @@ def home(request):
         if not found:
             pairs.append((match, None))
 
-    refresh_scoreboard()
-    scores = Score.objects.all().order_by('-value')
+    scores = sorted(Score.objects.all(), key = lambda score: score.normalized_value, reverse=True)
 
     return render(request, "index.html", {"pairs": pairs, "scores": scores})
 
@@ -79,19 +76,3 @@ def submit_prediction(request):
                                             away_penalty_predict=request.POST["away_p"] if "away_p" in request.POST else None)
     data = {"match": match, "predict": prediction}
     return render(request, 'match_list_item.html', data)
-
-
-def refresh_scoreboard():
-    users = User.objects.filter(is_staff=False)
-    for user in users:
-        try:
-            last_time_calculated = user.score.last_time_calculated
-            if last_time_calculated <= datetime.now(pytz.UTC)-timedelta(days=1):
-                user.score.value = user.score.calc()
-                user.score.last_time_calculated = datetime.now(pytz.UTC)
-                user.score.save()
-        except Score.DoesNotExist:
-            score = Score()
-            score.user = user
-            score.value = score.calc()
-            score.save()

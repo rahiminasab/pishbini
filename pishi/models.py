@@ -36,22 +36,48 @@ class Match(models.Model):
     home_penalty = models.PositiveIntegerField(null=True, blank=True)
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     finished = models.BooleanField(default=False)
+    winner = models.ForeignKey(Team, null=True, blank=True)
+    rare_coef = models.FloatField(default=0)
     is_past = False
 
     @property
     def due(self):
         return datetime.now(pytz.UTC) >= self.date
 
-    def winner(self):
+    def get_winner(self):
         if self.home_result > self.away_result:
             return self.home_team
         elif self.home_result == self.away_result == 0:
-            if self.home_penalty > self.away_penalty:
+            if not self.home_penalty and not self.away_penalty:
+                return None
+            elif self.home_penalty > self.away_penalty:
                 return self.home_team
             else:
                 return self.away_team
+        elif self.home_result == self.away_result:
+            return None
         else:
             return self.away_team
+
+    def save(self, *args, **kwargs):
+        if self.finished and self.rare_coef == 0:
+            self.winner = self.get_winner()
+            tot_count = Predict.objects.count()
+            err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
+            p_val = (tot_count-err_count)/tot_count
+            if p_val < 0.05:
+                self.rare_coef = 1.5
+            elif p_val < 0.1:
+                self.rare_coef = 1.4
+            elif p_val < 0.15:
+                self.rare_coef = 1.2
+            else:
+                self.rare_coef = 1
+
+            super(Match, self).save(*args, **kwargs)
+            Score.update_scores_for(self)
+        else:
+            super(Match, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "%s vs %s"%(self.home_team, self.away_team)
@@ -64,18 +90,23 @@ class Predict(models.Model):
     away_result_predict = models.PositiveIntegerField()
     home_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
     away_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
+    winner = models.ForeignKey(Team, null=True, blank=False)
 
     class Meta:
         unique_together = ('user', 'match',)
 
-    def winner(self):
+    def get_winner(self):
         if self.home_result_predict > self.away_result_predict:
             return self.match.home_team
         elif self.home_result_predict == self.away_result_predict == 0:
-            if self.home_penalty_predict > self.away_penalty_predict:
+            if not self.home_penalty_predict and not self.away_penalty_predict:
+                return None
+            elif self.home_penalty_predict > self.away_penalty_predict:
                 return self.match.home_team
             else:
                 return self.match.away_team
+        elif self.home_result_predict == self.away_result_predict:
+            return None
         else:
             return self.match.away_team
 
@@ -83,15 +114,28 @@ class Predict(models.Model):
         if not self.match.finished:
             return 0
         val = 0
-        if self.home_result_predict == self.match.home_result and self.away_result_predict == self.match.away_result:
-            val += 20
-        elif self.winner() == self.match.winner():
+        if self.winner == self.match.winner:
             val += 5
-            if self.home_result_predict-self.away_result_predict == self.match.home_result-self.match.away_result:
-                val += 8
+            if self.home_result_predict == 0 and self.away_result_predict == 0 and self.match.type > Match.GROUP:
+                if self.match.winner == self.match.home_team:
+                    val += 5 - abs(self.match.home_penalty - self.home_penalty_predict)
+                else:
+                    val += 5 - abs(self.match.away_penalty - self.away_penalty_predict)
+            elif self.home_result_predict - self.away_result_predict == self.match.home_result - self.match.away_result:
+                val += 5
+        if self.home_result_predict == self.match.home_result:
+            val += 5
+        if self.away_result_predict == self.match.away_result:
+            val += 5
+
+        if self.winner == self.match.winner:
+            val = val * self.match.rare_coef
+
         return val
 
-
+    def save(self, *args, **kwargs):
+        self.winner = self.get_winner()
+        super(Predict, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "%s-%s: %s-%s"%(self.user, self.match, self.home_result_predict, self.away_result_predict)
@@ -99,15 +143,24 @@ class Predict(models.Model):
 
 class Score(models.Model):
     user = models.OneToOneField(User, related_name="score", on_delete=models.CASCADE)
-    value = models.FloatField()
-    last_time_calculated = models.DateTimeField(auto_now_add=True)
+    value = models.FloatField(default=0)
+    num_predicted = models.PositiveIntegerField(default=0)
 
-    def calc(self):
-        predictions = self.user.predictions.all()
-        score = 0
-        for prediction in predictions:
-            score += prediction.value()
-        return score
+    @property
+    def normalized_value(self):
+        return (self.value/self.num_predicted)*(self.num_predicted**0.2)
+
+    @staticmethod
+    def update_scores_for(match):
+        predicts = Predict.objects.filter(match=match)
+        for predict in predicts:
+            try:
+                score_obj = Score.objects.get(user=predict.user)
+                score_obj.num_predicted += 1
+            except Score.DoesNotExist:
+                score_obj = Score(user=predict.user, num_predicted=1)
+            score_obj.value += predict.value()
+            score_obj.save()
 
     def __unicode__(self):
         return "%s: %s" % (self.user, self.value)

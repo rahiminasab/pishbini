@@ -45,7 +45,7 @@ def home(request):
         if not found:
             pairs.append((match, None))
 
-    scores = sorted(Score.objects.all(), key = lambda score: score.normalized_value, reverse=True)
+    scores = Score.objects.all().order_by("-value")
 
     return render(request, "index.html", {"pairs": pairs, "scores": scores})
 

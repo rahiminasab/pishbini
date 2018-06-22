@@ -37,7 +37,7 @@ class Match(models.Model):
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     finished = models.BooleanField(default=False)
     winner = models.ForeignKey(Team, null=True, blank=True)
-    rare_coef = models.FloatField(default=0)
+    rare_extra = models.IntegerField(default=-1)
     is_past = False
 
     @property
@@ -60,19 +60,22 @@ class Match(models.Model):
             return self.away_team
 
     def save(self, *args, **kwargs):
-        if self.finished and self.rare_coef == 0:
+        if self.finished and self.rare_extra == -1:
             self.winner = self.get_winner()
-            tot_count = Predict.objects.count()
-            err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
-            p_val = (tot_count-err_count)/tot_count
-            if p_val < 0.05:
-                self.rare_coef = 1.5
-            elif p_val < 0.1:
-                self.rare_coef = 1.4
-            elif p_val < 0.15:
-                self.rare_coef = 1.2
+            tot_count = Predict.objects.filter(match=self).count()
+            if tot_count > 0:
+                err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
+                p_val = (tot_count-err_count)/float(tot_count)
+                if p_val < 0.05:
+                    self.rare_extra = 20
+                elif p_val < 0.1:
+                    self.rare_extra = 15
+                elif p_val < 0.15:
+                    self.rare_extra = 10
+                else:
+                    self.rare_extra = 0
             else:
-                self.rare_coef = 1
+                self.rare_extra = 0
 
             super(Match, self).save(*args, **kwargs)
             Score.update_scores_for(self)
@@ -129,7 +132,7 @@ class Predict(models.Model):
             val += 5
 
         if self.winner == self.match.winner:
-            val = val * self.match.rare_coef
+            val += self.match.rare_extra
 
         return val
 

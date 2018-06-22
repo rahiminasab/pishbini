@@ -8,7 +8,6 @@
                 <div class="col-2">
                     <strong>Score</strong>
                 </div>
-{#                <div class="col-1"></div>#}
             </div>
         </li>
     {% for score in scores %}
@@ -28,16 +27,7 @@
                 <div class="col-8">
                     {{ score.user.get_full_name | default:score.user.username | truncatechars:20 }}
                 </div>
-                <div class="col-2">{{ score.normalized_value | floatformat:2 }}</div>
-{#                <div class="col-1 scoreboard-badge">#}
-{#                    {% if forloop.counter == 1 %}#}
-{#                        <i class="fas fa-chess-king"></i>#}
-{#                    {% elif forloop.counter == 2 %}#}
-{#                        <i class="fas fa-chess-queen"></i>#}
-{#                    {% elif forloop.counter == 3 %}#}
-{#                        <i class="fas fa-chess-knight"></i>#}
-{#                    {% endif %}#}
-{#                </div>#}
+                <div class="col-2">{{ score.value | floatformat:2 }}</div>
             </div>
         </li>
     {% endfor %}

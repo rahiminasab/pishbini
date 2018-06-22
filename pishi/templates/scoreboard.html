@@ -29,7 +29,7 @@
                 <div class="col-8">
                     {{ score.user.get_full_name | default:score.user.username | truncatechars:20 }}
                 </div>
-                <div class="col-2">{{ score.value | floatformat:2 }}</div>
+                <div class="col-2">{{ score.value }}</div>
             </div>
         </li>
     {% endfor %}

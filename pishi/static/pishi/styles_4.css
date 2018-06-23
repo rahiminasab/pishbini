@@ -89,3 +89,43 @@ li:nth-child(odd) {
 .scoreboard-badge {
     font-size: x-large;
 }
+
+#what_are_rules {
+    cursor: pointer;
+}
+
+.rules-list {
+    margin-bottom: 20px;
+}
+
+#back_to_scores_icon {
+    cursor: pointer;
+}
+
+.royal-badge {
+    color: gold;
+}
+
+.full-house-badge {
+    color: saddlebrown;
+}
+
+.straight-badge {
+    color: red;
+}
+
+.one-pair-badge {
+    color: royalblue;
+}
+
+.oracle-badge {
+    color: #7fbcf9;
+}
+
+.nostradamus-badge {
+    color: #13c313;
+}
+
+.trelawney-badge {
+    color: hotpink;
+}

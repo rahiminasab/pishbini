@@ -89,6 +89,16 @@
         parentRow.hide();
     });
 
+    $(document.body).on('click', '#what_are_rules', function () {
+        $('.scores-list').hide();
+        $('.rules-container').show();
+    });
+
+    $(document.body).on('click', '#back_to_scores_icon', function () {
+        $('.rules-container').hide();
+        $('.scores-list').show();
+    });
+
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {

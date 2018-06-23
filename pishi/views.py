@@ -47,7 +47,10 @@ def home(request):
 
     scores = Score.objects.all().order_by("-value")
 
-    return render(request, "index.html", {"pairs": pairs, "scores": scores})
+    data = {"pairs": pairs, "scores": scores}
+    data.update(Badge.DICT)
+
+    return render(request, "index.html", data)
 
 
 def submit_prediction(request):
@@ -75,4 +78,5 @@ def submit_prediction(request):
                                             home_penalty_predict=request.POST["home_p"] if "home_p" in request.POST else None,
                                             away_penalty_predict=request.POST["away_p"] if "away_p" in request.POST else None)
     data = {"match": match, "predict": prediction}
+    data.update(Badge.DICT)
     return render(request, 'match_list_item.html', data)

@@ -47,15 +47,13 @@ class Match(models.Model):
     def get_winner(self):
         if self.home_result > self.away_result:
             return self.home_team
-        elif self.home_result == self.away_result == 0:
-            if not self.home_penalty and not self.away_penalty:
+        elif self.home_result == self.away_result:
+            if not self.home_penalty:
                 return None
             elif self.home_penalty > self.away_penalty:
                 return self.home_team
             else:
                 return self.away_team
-        elif self.home_result == self.away_result:
-            return None
         else:
             return self.away_team
 
@@ -66,12 +64,12 @@ class Match(models.Model):
             if tot_count > 0:
                 err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
                 p_val = (tot_count-err_count)/float(tot_count)
-                if p_val < 0.05:
-                    self.rare_extra = 20
-                elif p_val < 0.1:
-                    self.rare_extra = 15
-                elif p_val < 0.15:
-                    self.rare_extra = 10
+                if p_val < 0.2:
+                    self.rare_extra = Badge.ORACLE
+                elif p_val < 0.3:
+                    self.rare_extra = Badge.NOSTRADAMUS
+                elif p_val < 0.4:
+                    self.rare_extra = Badge.TRELAWNEY
                 else:
                     self.rare_extra = 0
             else:
@@ -101,42 +99,48 @@ class Predict(models.Model):
     def get_winner(self):
         if self.home_result_predict > self.away_result_predict:
             return self.match.home_team
-        elif self.home_result_predict == self.away_result_predict == 0:
-            if not self.home_penalty_predict and not self.away_penalty_predict:
+        elif self.home_result_predict == self.away_result_predict:
+            if not self.home_penalty_predict:
                 return None
             elif self.home_penalty_predict > self.away_penalty_predict:
                 return self.match.home_team
             else:
                 return self.match.away_team
-        elif self.home_result_predict == self.away_result_predict:
-            return None
         else:
             return self.match.away_team
 
-    def value(self):
-        def is_royal_flush():
-            if self.home_result_predict == self.match.home_result and self.away_result_predict == self.match.away_result:
-                if self.match.home_penalty:
-                    return self.home_penalty_predict == self.match.home_penalty
-                return True
-            return False
+    @property
+    def is_royal(self):
+        if self.home_result_predict == self.match.home_result and self.away_result_predict == self.match.away_result:
+            if self.match.home_penalty:
+                return self.home_penalty_predict == self.match.home_penalty
+            return True
+        return False
 
-        def is_full_house():
-            return self.home_result_predict-self.away_result_predict == self.match.home_result-self.match.away_result
+    @property
+    def is_full_house(self):
+        return self.home_result_predict - self.away_result_predict == self.match.home_result - self.match.away_result
+
+    @property
+    def is_straight(self):
+        return self.winner == self.match.winner
+
+    @property
+    def value(self):
 
         if not self.match.finished:
             return 0
 
-        if self.winner == self.match.winner:
-            if is_royal_flush():
-                val = 20
-            elif is_full_house():
-                val = 12
+        if self.is_straight:
+            if self.is_royal:
+                val = Badge.ROYAL
+            elif self.is_full_house:
+                val = Badge.FULL_HOUSE
             else:
-                val = 8
+                val = Badge.STRAIGHT
             val += self.match.rare_extra
         else:
-            val = 2
+            val = Badge.ONE_PAIR
 
         return val
 
@@ -146,6 +150,26 @@ class Predict(models.Model):
 
     def __unicode__(self):
         return "%s-%s: %s-%s"%(self.user, self.match, self.home_result_predict, self.away_result_predict)
+
+
+class Badge(object):
+    ROYAL = 20
+    FULL_HOUSE = 12
+    STRAIGHT = 8
+    ONE_PAIR = 2
+    ORACLE = 20
+    NOSTRADAMUS = 15
+    TRELAWNEY = 10
+
+    DICT = {
+        "ROYAL": ROYAL,
+        "FULL_HOUSE": FULL_HOUSE,
+        "STRAIGHT": STRAIGHT,
+        "ONE_PAIR": ONE_PAIR,
+        "ORACLE": ORACLE,
+        "NOSTRADAMUS":NOSTRADAMUS,
+        "TRELAWNEY": TRELAWNEY
+    }
 
 
 class Score(models.Model):
@@ -166,7 +190,7 @@ class Score(models.Model):
                 score_obj.num_predicted += 1
             except Score.DoesNotExist:
                 score_obj = Score(user=predict.user, num_predicted=1)
-            score_obj.value += predict.value()
+            score_obj.value += predict.value
             score_obj.save()
 
     def __unicode__(self):

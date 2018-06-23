@@ -62,7 +62,7 @@ li:nth-child(odd) {
 }
 
 .predicted-scores-row {
-    background-color: #f9c83f4f;
+    background-color: #e8d08a4f;
 }
 
 .predict-submit-btns-row {
@@ -103,7 +103,7 @@ li:nth-child(odd) {
 }
 
 .royal-badge {
-    color: gold;
+    color: #ff9800;
 }
 
 .full-house-badge {

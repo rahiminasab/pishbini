@@ -1,29 +1,13 @@
-from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest, \
+    HttpResponseNotAllowed
 
 from models import *
-from forms import SignUpForm
 
 
 def index(request):
     return HttpResponseRedirect(reverse("login"))
-
-
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('home')
-    else:
-        form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
 
 
 def home(request):
@@ -31,6 +15,10 @@ def home(request):
 
     if not user.is_authenticated():
         return HttpResponseRedirect(reverse("login"))
+
+    if not user.email or not user.is_active:
+        import registrar.views as registrar
+        return registrar.email_req(request)
 
     matches = Match.objects.all().order_by('-date')
     predictions = user.predictions.all()

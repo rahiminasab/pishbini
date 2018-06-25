@@ -118,3 +118,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/home/rahiminasab/var/www/pishbini/static/'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ['PIISHI_SMTP_HOST']
+EMAIL_HOST_USER = os.environ['PIISHI_EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['PIISHI_EMAIL_HOST_PASS']
+EMAIL_PORT = os.environ['PIISHI_EMAIL_PORT']

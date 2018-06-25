@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.first_name }},
+
+Thanks for signing up for Piishi!
+
+Please click on the following link to activate your account. If you can't click the link from your email program,
+please copy and paste it into your web browser:
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Cheers,
+The Piishi team
+{% endautoescape %}

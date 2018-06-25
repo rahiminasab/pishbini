@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <p class="lead">Sorry for interruption {{ user.first_name }}. Please provide your email address in order to continue: </p>
+        <form id="email_required_form" method="post" role="form" action="{% url 'email_req' %}">
+            {% csrf_token %}
+            <div style="margin-bottom: 25px" class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                </div>
+                <input id="email_input" type="email" class="form-control" name="email_input" placeholder="cat@piishi.com" required>
+            </div>
+            <div style="margin-top:10px" class="form-group row">
+                <!-- Button -->
+                <div class="col-sm-12 controls">
+                    <button type="submit" class="btn btn-success">Continue  </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -17,6 +17,11 @@ li:nth-child(odd) {
     margin-bottom: 20px;
 }
 
+.signupbox {
+    margin-top:50px;
+    margin-bottom: 20px;
+}
+
 /*--------------------------*/
 
 /* header stuff*/

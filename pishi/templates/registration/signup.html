@@ -1,76 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div id="signupbox" style="margin-top:50px;" class="row justify-content-center">
-        <div class="card col-lg-7" >
-            <div class="card-header bg-light text-center text-secondary">
-                <div class="card-title">Sign Up</div>
-            </div>
+    <div class="row justify-content-center signupbox">
+        <div class="col-lg-4 col-md-5 col-sm-6" >
+            <div class="card">
+                <div class="card-header bg-light text-center text-secondary">
+                    <div class="card-title">Sign Up</div>
+                </div>
 
-            <div style="padding-top:30px" class="card-body" >
-                <form id="signupform" class="form-horizontal" role="form" method="post">
-                    {% csrf_token %}
-                    {% for error in form.non_field_errors %}
-                        <div class="form-group has-errors text-danger small">
-                            {{error}}
+                <div style="padding-top:30px" class="card-body" >
+                    <form id="signupform" class="form-horizontal" role="form" method="post">
+                        {% csrf_token %}
+                        {% for error in form.non_field_errors %}
+                            <div class="form-group has-errors text-danger small">
+                                {{error}}
+                            </div>
+                        {% endfor %}
+                        {% for field in form  %}
+                            <div class="form-group has-errors text-danger small">
+                                {{field.errors}}
+                            </div>
+                            {% if field.id_for_label == "id_username" %}
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input id="{{ field.id_for_label }}" type="text" class="form-control" name="{{ field.html_name }}" value="" placeholder="username" required>
+                                </div>
+                            {% elif field.id_for_label == "id_first_name" %}
+                                 <div style="margin-bottom: 25px" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                    </div>
+                                    <input id="{{ field.id_for_label }}" type="text" class="form-control" name="{{ field.html_name }}" placeholder="first name" required>
+                                </div>
+                            {% elif field.id_for_label == "id_last_name" %}
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                    </div>
+                                    <input id="{{ field.id_for_label }}" type="text" class="form-control" name="{{ field.html_name }}" placeholder="last name" required>
+                                </div>
+                            {% elif field.id_for_label == "id_email" %}
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                    <input id="{{ field.id_for_label }}" type="email" class="form-control" name="{{ field.html_name }}" placeholder="cat@piishi.com" required>
+                                </div>
+                            {% elif field.id_for_label == "id_password1" %}
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                    </div>
+                                    <input id="{{ field.id_for_label }}" type="password" class="form-control" name="{{ field.html_name }}" placeholder="password" required>
+                                </div>
+                            {% elif field.id_for_label == "id_password2" %}
+                                 <div style="margin-bottom: 25px" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                    </div>
+                                    <input id="{{ field.id_for_label }}" type="password" class="form-control" name="{{ field.html_name }}" placeholder="repeat password" required>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div style="margin-top:10px" class="row form-group">
+                            <!-- Button -->
+                            <div class="col-sm-12 controls">
+                                <button type="submit" id="btn-signup" class="btn btn-success">Sign Up  </button>
+                                <a class="btn btn-danger" href="{% url 'login' %}">Cancel  </a>
+                            </div>
                         </div>
-                    {% endfor %}
-                    {% for field in form  %}
-                        <div class="form-group has-errors text-danger small">
-                            {{field.errors}}
-                        </div>
-                        {% if field.id_for_label == "id_username" %}
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
-                                <input id="{{ field.id_for_label }}" type="text" class="form-control" name="{{ field.html_name }}" value="" placeholder="username" required>
-                            </div>
-                        {% elif field.id_for_label == "id_first_name" %}
-                             <div style="margin-bottom: 25px" class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-                                </div>
-                                <input id="{{ field.id_for_label }}" type="text" class="form-control" name="{{ field.html_name }}" placeholder="first name" required>
-                            </div>
-                        {% elif field.id_for_label == "id_last_name" %}
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-                                </div>
-                                <input id="{{ field.id_for_label }}" type="text" class="form-control" name="{{ field.html_name }}" placeholder="last name" required>
-                            </div>
-                        {% elif field.id_for_label == "id_email" %}
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                </div>
-                                <input id="{{ field.id_for_label }}" type="email" class="form-control" name="{{ field.html_name }}" placeholder="cat@piishi.com" required>
-                            </div>
-                        {% elif field.id_for_label == "id_password1" %}
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input id="{{ field.id_for_label }}" type="password" class="form-control" name="{{ field.html_name }}" placeholder="password" required>
-                            </div>
-                        {% elif field.id_for_label == "id_password2" %}
-                             <div style="margin-bottom: 25px" class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input id="{{ field.id_for_label }}" type="password" class="form-control" name="{{ field.html_name }}" placeholder="repeat password" required>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                    <div style="margin-top:10px" class="row form-group">
-                        <!-- Button -->
-                        <div class="col-sm-12 controls">
-                            <button type="submit" id="btn-signup" class="btn btn-success">Sign Up  </button>
-                            <a class="btn btn-danger" href="{% url 'login' %}">Cancel  </a>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

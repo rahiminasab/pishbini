@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pishi',
-    'celery'
+    #'celery'
 ]
 
 MIDDLEWARE = [
@@ -95,7 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CELERY_BROKER_URL = 'sqs://' + os.getenv('AWS_ACCESS_KEY') + ':' + os.getenv('AWS_SECRET_KEY') + '@'
+#CELERY_BROKER_URL = 'sqs://' + os.getenv('AWS_ACCESS_KEY') + ':' + os.getenv('AWS_SECRET_KEY') + '@'
 
 
 # Internationalization

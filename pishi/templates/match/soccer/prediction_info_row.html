@@ -1,0 +1,49 @@
+<div class="predicted-info-div">
+    <div class="row">
+        <div class="col badge badge-warning">
+           predicted
+        </div>
+    </div>
+    <div class="row match-list-item-info predicted-scores-row">
+        <div class="col-5">
+            {{ predict.home_result_predict }}
+            {% if predict.home_penalty_predict %}
+                ({{ predict.home_penalty_predict }})
+            {% endif %}
+        </div>
+        <div class="col-2 text-nowrap jumbotron-fluid">
+            {% if match.finished %}
+                <div class="row">
+                    <div class="col pishi-badge-container">
+                        {% if predict.is_royal %}
+                            <i class="fas fa-crown royal-badge"></i>
+                        {% elif predict.is_full_house %}
+                            <i class="fas fa-home full-house-badge"></i>
+                        {% elif predict.is_straight %}
+                            <i class="fas fa-venus-mars straight-badge"></i>
+                        {% else %}
+                            <i class="fas fa-sad-tear one-pair-badge"></i>
+                        {% endif %}
+                        {% if predict.is_straight %}
+                            {% if match.rare_extra == ORACLE %}
+                                <i class="fas fa-bolt oracle-badge"></i>
+                            {% elif match.rare_extra == NOSTRADAMUS %}
+                                <i class="fab fa-android nostradamus-badge"></i>
+                            {% elif match.rare_extra == TRELAWNEY %}
+                                <i class="fas fa-glasses trelawney-badge"></i>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <i class="fas fa-paw"></i>
+            {% endif %}
+        </div>
+        <div class="col-5">
+            {{ predict.away_result_predict }}
+            {% if predict.away_penalty_predict %}
+                ({{ predict.away_penalty_predict }})
+            {% endif %}
+        </div>
+    </div>
+</div>

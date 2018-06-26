@@ -1,6 +1,11 @@
-<form class="predict-form" method="post">
+<form class="predict-form" method="post" action="{% url 'submit_prediction' %}">
     {% csrf_token %}
-    <input class="match_pk" type="hidden" value="{{ match.pk }}">
+    {% for error in form.non_field_errors %}
+        <div class="form-group has-errors text-danger small">
+            {{error}}
+        </div>
+    {% endfor %}
+{#    <input class="match_pk" type="hidden" value="{{ match.pk }}">#}
     <input class="match_type" type="hidden" value="{{ match.type }}">
     <div class="row">
         <div class="col-5">
@@ -8,7 +13,7 @@
                    class="form-control form-control-sm home_result_prediction"
                    type="number"
                    value="{{ predict.home_result_predict }}"
-                   name="home_result_prediction" required>
+                   name="home_result" required>
         </div>
         <div class="col-2">-</div>
         <div class="col-5">
@@ -16,7 +21,7 @@
                    class="form-control form-control-sm away_result_prediction"
                    type="number"
                    value="{{ predict.away_result_predict }}"
-                   name="away_result_prediction" required>
+                   name="away_result" required>
         </div>
     </div>
     {% if match.type != 0 %}
@@ -26,7 +31,7 @@
                        class="form-control form-control-sm home_penalty_prediction"
                        type="number"
                        value="{% if predict.home_penalty_predict %}{{ predict.home_penalty_predict }}{% endif %}"
-                       name="home_penalty_prediction">
+                       name="home_penalty">
             </div>
             <div class="col-2">-</div>
             <div class="col-5">
@@ -34,14 +39,14 @@
                        class="form-control form-control-sm away_penalty_prediction"
                        type="number"
                        value="{% if predict.away_penalty_predict %}{{ predict.away_penalty_predict }}{% endif %}"
-                       name="away_penalty_predict">
+                       name="away_penalty">
             </div>
         </div>
     {% endif %}
     <div class="row predict-submit-btns-row">
         <div class="col">
             <button class="btn btn-success btn-sm" type="submit">submit</button>
-            <button class="btn btn-danger btn-sm {{ cancel_btn_class }}" type="reset">cancel</button>
+            <button class="btn btn-danger btn-sm predict-form-cancel-btn" type="reset">cancel</button>
         </div>
     </div>
 </form>

@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+
 from pishi import views as core_views
 from pishi.registrar import urls as registrar_urls
+from pishi.match import urls as match_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', core_views.index),
     url(r'^home/$', core_views.home, name='home'),
-    url(r'^predict/', core_views.submit_prediction, name='submit_prediction'),
 ]
 
 urlpatterns.extend(registrar_urls.urlpatterns)
+urlpatterns.extend(match_urls.urlpatterns)

@@ -4,7 +4,7 @@
     </li>
     {% for pair in pairs %}
         <li class="list-group-item text-center">
-            {% include 'match_list_item.html' with match=pair.0 predict=pair.1 %}
+            {% include 'match/soccer/match_list_item.html' with match=pair.0 predict=pair.1 form=pair.2%}
         </li>
     {% endfor %}
 </ul>

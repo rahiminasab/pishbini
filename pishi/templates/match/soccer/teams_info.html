@@ -1,0 +1,46 @@
+{% load tz %}
+{#  flags row  #}
+<div class="row">
+    <div class="col-5">
+        <img src="{{ match.home_team.flag }}" class="img-fluid team-flag">
+    </div>
+    <div class="col-2"></div>
+    <div class="col-5">
+        <img src="{{ match.away_team.flag }}" class="img-fluid team-flag">
+    </div>
+</div>
+
+{#  team names row  #}
+<div class="row match-list-item-info">
+    <div class="col-5">
+        <strong>{{ match.home_team }}</strong>
+    </div>
+    <div class="col-2"><small>vs</small></div>
+    <div class="col-5">
+        <strong>{{ match.away_team }}</strong>
+    </div>
+</div>
+
+{#  actual scores row  #}
+{% if match.finished %}
+    <div class="row match-list-item-info actual-scores-row">
+        <div class="col-5">
+            {{ match.home_result }}
+            {% if match.home_penalty %}
+                ({{ match.home_penalty }})
+            {% endif %}
+        </div>
+        <div class="col-2"><small><i class="fas fa-futbol"></i></small></div>
+        <div class="col-5">
+            {{ match.away_result }}
+            {% if match.away_penalty %}
+                ({{ match.away_penalty }})
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{#  date row  #}
+<div class="row match-list-item-info">
+    <div class="col"><small>{{ match.date | localtime | date:"D d M, h:i A" }}</small></div>
+</div>

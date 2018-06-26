@@ -1,0 +1,16 @@
+<div class="row justify-content-center">
+    <div class="col-9 col-md-8 col-xl-9">
+        {% include 'match/soccer/teams_info.html' with match=match %}
+        {#  prediction init row  #}
+        {% if not match.due and not match.finished and not predict %}
+            {% include 'match/soccer/prediction_add_row.html' with match=match form=form %}
+        {% endif %}
+        {#  prediction done row  #}
+        {% if predict %}
+            {% include 'match/soccer/prediction_info_row.html' with match=match predict=predict %}
+            {% if not match.due %}
+                {% include 'match/soccer/prediction_edit_row.html' with match=match predict=predict form=form %}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

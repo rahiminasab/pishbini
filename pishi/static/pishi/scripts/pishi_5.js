@@ -33,7 +33,7 @@
         btnRow.siblings('.predict-form-row').show();
     });
 
-    $(document.body).on('click', '.predict-add-cancel-button', function () {
+    $(document.body).on('click', '.predict-form-cancel-btn', function () {
         let formRow = $(this).closest('.predict-form-row');
         formRow.hide();
         formRow.siblings('.predict-btn-row').show();
@@ -55,24 +55,24 @@
        }
     });
 
-    $(document.body).on('submit', '.predict-form', function (e) {
-        e.preventDefault();
-        let home_r = parseInt($(this).find('.home_result_prediction').val()),
-            away_r = parseInt($(this).find('.away_result_prediction').val()),
-            match_pk = parseInt($(this).find('.match_pk').val()),
-            match_type = parseInt($(this).find('.match_type').val());
-        let data = {"home_r": home_r, "away_r": away_r, "match_pk": match_pk};
-
-        if(match_type !== 0 && home_r === 0 && away_r === 0) {
-            data["home_p"] = parseInt($(this).find('.home_penalty_prediction').val());
-            data["away_p"] = parseInt($(this).find('.away_penalty_prediction').val());
-        }
-        let parent_li = $(this).closest('li');
-        $.post('/predict/', data)
-            .done(function (result) {
-                parent_li.html(result);
-            })
-    });
+    // $(document.body).on('submit', '.predict-form', function (e) {
+    //     e.preventDefault();
+    //     let home_r = parseInt($(this).find('.home_result_prediction').val()),
+    //         away_r = parseInt($(this).find('.away_result_prediction').val()),
+    //         match_pk = parseInt($(this).find('.match_pk').val()),
+    //         match_type = parseInt($(this).find('.match_type').val());
+    //     let data = {"home_r": home_r, "away_r": away_r, "match_pk": match_pk};
+    //
+    //     if(match_type !== 0 && home_r === 0 && away_r === 0) {
+    //         data["home_p"] = parseInt($(this).find('.home_penalty_prediction').val());
+    //         data["away_p"] = parseInt($(this).find('.away_penalty_prediction').val());
+    //     }
+    //     let parent_li = $(this).closest('li');
+    //     $.post('/predict/', data)
+    //         .done(function (result) {
+    //             parent_li.html(result);
+    //         })
+    // });
 
     $(document.body).on('click', '.predict-edit-btn', function () {
         let parentRow = $(this).closest('.predict-edit-btn-row');

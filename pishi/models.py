@@ -87,22 +87,22 @@ class Match(models.Model):
 class Predict(models.Model):
     user = models.ForeignKey(User, related_name="predictions", on_delete=models.CASCADE)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
-    home_result_predict = models.PositiveIntegerField()
-    away_result_predict = models.PositiveIntegerField()
-    home_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
-    away_penalty_predict = models.PositiveIntegerField(null=True, blank=True)
+    home_result = models.PositiveIntegerField()
+    away_result = models.PositiveIntegerField()
+    home_penalty = models.PositiveIntegerField(null=True, blank=True)
+    away_penalty = models.PositiveIntegerField(null=True, blank=True)
     winner = models.ForeignKey(Team, null=True, blank=False)
 
     class Meta:
         unique_together = ('user', 'match',)
 
     def get_winner(self):
-        if self.home_result_predict > self.away_result_predict:
+        if self.home_result > self.away_result:
             return self.match.home_team
-        elif self.home_result_predict == self.away_result_predict:
-            if not self.home_penalty_predict:
+        elif self.home_result == self.away_result:
+            if not self.home_penalty:
                 return None
-            elif self.home_penalty_predict > self.away_penalty_predict:
+            elif self.home_penalty > self.away_penalty:
                 return self.match.home_team
             else:
                 return self.match.away_team
@@ -111,15 +111,15 @@ class Predict(models.Model):
 
     @property
     def is_royal(self):
-        if self.home_result_predict == self.match.home_result and self.away_result_predict == self.match.away_result:
+        if self.home_result == self.match.home_result and self.away_result == self.match.away_result:
             if self.match.home_penalty:
-                return self.home_penalty_predict == self.match.home_penalty
+                return self.home_penalty == self.match.home_penalty
             return True
         return False
 
     @property
     def is_full_house(self):
-        return self.home_result_predict - self.away_result_predict == self.match.home_result - self.match.away_result
+        return self.home_result - self.away_result == self.match.home_result - self.match.away_result
 
     @property
     def is_straight(self):
@@ -149,7 +149,7 @@ class Predict(models.Model):
         super(Predict, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return "%s-%s: %s-%s"%(self.user, self.match, self.home_result_predict, self.away_result_predict)
+        return "%s-%s: %s-%s"%(self.user, self.match, self.home_result, self.away_result)
 
 
 class Badge(object):

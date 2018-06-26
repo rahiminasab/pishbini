@@ -7,7 +7,7 @@
             <input placeholder="{{ match.home_team.fifa_code | upper }}"
                    class="form-control form-control-sm home_result_prediction"
                    type="number"
-                   value="{{ predict.home_result_predict }}"
+                   value="{{ predict.home_result }}"
                    name="home_result_prediction" required>
         </div>
         <div class="col-2">-</div>
@@ -15,17 +15,17 @@
             <input placeholder="{{ match.away_team.fifa_code | upper }}"
                    class="form-control form-control-sm away_result_prediction"
                    type="number"
-                   value="{{ predict.away_result_predict }}"
+                   value="{{ predict.away_result }}"
                    name="away_result_prediction" required>
         </div>
     </div>
     {% if match.type != 0 %}
-        <div class="row penalty-predict-row" {% if not predict.home_penalty_predict %} hidden {% endif %}>
+        <div class="row penalty-predict-row" {% if not predict.home_penalty %} hidden {% endif %}>
             <div class="col-5">
                 <input placeholder="penalty"
                        class="form-control form-control-sm home_penalty_prediction"
                        type="number"
-                       value="{% if predict.home_penalty_predict %}{{ predict.home_penalty_predict }}{% endif %}"
+                       value="{% if predict.home_penalty %}{{ predict.home_penalty }}{% endif %}"
                        name="home_penalty_prediction">
             </div>
             <div class="col-2">-</div>
@@ -33,7 +33,7 @@
                 <input placeholder="penalty"
                        class="form-control form-control-sm away_penalty_prediction"
                        type="number"
-                       value="{% if predict.away_penalty_predict %}{{ predict.away_penalty_predict }}{% endif %}"
+                       value="{% if predict.away_penalty %}{{ predict.away_penalty }}{% endif %}"
                        name="away_penalty_predict">
             </div>
         </div>

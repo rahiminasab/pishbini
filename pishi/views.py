@@ -53,18 +53,18 @@ def submit_prediction(request):
 
     try:
         prediction = user.predictions.get(match=match)
-        prediction.home_result_predict = request.POST["home_r"]
-        prediction.away_result_predict = request.POST["away_r"]
-        prediction.home_penalty_predict = request.POST["home_p"] if "home_p" in request.POST else None
-        prediction.away_penalty_predict = request.POST["away_p"] if "away_p" in request.POST else None
+        prediction.home_result = request.POST["home_r"]
+        prediction.away_result = request.POST["away_r"]
+        prediction.home_penalty = request.POST["home_p"] if "home_p" in request.POST else None
+        prediction.away_penalty = request.POST["away_p"] if "away_p" in request.POST else None
         prediction.save()
     except Predict.DoesNotExist:
         prediction = Predict.objects.create(user=user,
                                             match=match,
-                                            home_result_predict=request.POST["home_r"],
-                                            away_result_predict=request.POST["away_r"],
-                                            home_penalty_predict=request.POST["home_p"] if "home_p" in request.POST else None,
-                                            away_penalty_predict=request.POST["away_p"] if "away_p" in request.POST else None)
+                                            home_result=request.POST["home_r"],
+                                            away_result=request.POST["away_r"],
+                                            home_penalty=request.POST["home_p"] if "home_p" in request.POST else None,
+                                            away_penalty=request.POST["away_p"] if "away_p" in request.POST else None)
     data = {"match": match, "predict": prediction}
     data.update(Badge.DICT)
     return render(request, 'match_list_item.html', data)

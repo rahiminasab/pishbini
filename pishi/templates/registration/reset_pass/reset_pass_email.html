@@ -1,0 +1,14 @@
+{% autoescape off %}
+Hi {{ user.first_name }},
+
+We have received a password reset request for your account at piishi.com
+
+If you didn't make this request, simply ignore and delete this email.
+
+Otherwise, click on the following link to reset your password. If you can't click the link from your email program,
+please copy and paste it into your web browser:
+http://{{ domain }}{% url 'reset_pass_confirm' uidb64=uid token=token %}
+
+Thanks,
+The Piishi team
+{% endautoescape %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <p class="lead">{{ user.first_name }}, please set up a new password: </p>
+        <form method="post" role="form" action="{% url 'reset_pass_done' %}">
+            {% csrf_token %}
+            {% for error in form.non_field_errors %}
+                <div class="form-group has-errors text-danger small">
+                    {{error}}
+                </div>
+            {% endfor %}
+            {% for field in form  %}
+                <div class="form-group has-errors text-danger small">
+                    {{field.errors}}
+                </div>
+                {% if field.id_for_label == "id_password" %}
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input id="{{ field.id_for_label }}" type="password" class="form-control" name="{{ field.html_name }}" placeholder="password" required>
+                    </div>
+                {% elif field.id_for_label == "id_password_repeat" %}
+                     <div style="margin-bottom: 25px" class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input id="{{ field.id_for_label }}" type="password" class="form-control" name="{{ field.html_name }}" placeholder="repeat password" required>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div style="margin-top:10px" class="form-group row">
+                <!-- Button -->
+                <div class="col-sm-12 controls">
+                    <button type="submit" class="btn btn-success">Continue  </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

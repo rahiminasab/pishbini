@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-lg-7">
         <p class="lead">Sorry for interruption {{ user.first_name }}. Please provide your email address in order to continue: </p>
-        <form id="email_required_form" method="post" role="form" action="{% url 'email_req' %}">
+        <form id="email_required_form" method="post" role="form" action="{% url 'user_activation_required' %}">
             {% csrf_token %}
             <div style="margin-bottom: 25px" class="input-group">
                 <div class="input-group-prepend">

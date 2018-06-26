@@ -1,0 +1,31 @@
+{%  extends 'base.html' %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <p class="lead">Please provide your email address:</p>
+            <form method="post" role="form" action="{% url 'reset_pass_submit' %}">
+                {% csrf_token %}
+                {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                {% endfor %}
+                <div class="form-group has-errors text-danger small">
+                    {{form.email_input.errors}}
+                </div>
+                <div style="margin-bottom: 25px" class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <input id="email_input" type="email" class="form-control" name="email_input" placeholder="cat@piishi.com" required>
+                </div>
+                <div style="margin-top:10px" class="form-group row">
+                    <!-- Button -->
+                    <div class="col-sm-12 controls">
+                        <button type="submit" class="btn btn-success">Continue  </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

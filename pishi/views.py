@@ -18,7 +18,7 @@ def home(request):
 
     if not user.email or not user.is_active:
         import registrar.views as registrar
-        return registrar.email_req(request)
+        return registrar.user_activation_required(request)
 
     matches = Match.objects.all().order_by('-date')
     predictions = user.predictions.all()

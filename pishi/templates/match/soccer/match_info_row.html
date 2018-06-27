@@ -50,43 +50,43 @@
         <div class="col d-inline-flex justify-content-center">
             {% if summary.royal > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fas fa-crown royal-badge"></i>
+                    {% include 'icons/royal.html' %}
                     <sub><small>{{ summary.royal }}</small></sub>
                 </div>
             {% endif %}
             {% if summary.full_house > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fas fa-home full-house-badge"></i>
+                    {% include 'icons/full_house.html' %}
                     <sub><small>{{ summary.full_house }}</small></sub>
                 </div>
             {% endif %}
             {% if summary.straight > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fas fa-venus-mars straight-badge"></i>
+                    {% include 'icons/straight.html' %}
                     <sub><small>{{ summary.straight }}</small></sub>
                 </div>
             {% endif %}
             {% if summary.one_pair > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fas fa-blind one-pair-badge"></i>
+                    {% include 'icons/one_pair.html' %}
                     <sub><small>{{ summary.one_pair }}</small></sub>
                 </div>
             {% endif %}
             {% if summary.oracle > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fas fa-bolt oracle-badge"></i>
+                    {% include 'icons/oracle.html' %}
                     <sub><small>{{ summary.oracle }}</small></sub>
                 </div>
             {% endif %}
             {% if summary.nostradamus > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fab fa-android nostradamus-badge"></i>
+                    {% include 'icons/nostradamus.html' %}
                     <sub><small>{{ summary.nostradamus }}</small></sub>
                 </div>
             {% endif %}
             {% if summary.trelawney > 0 %}
                 <div class="match-summary-icon">
-                    <i class="fas fa-glasses trelawney-badge"></i>
+                    {% include 'icons/trelawney.html' %}
                     <sub><small>{{ summary.trelawney }}</small></sub>
                 </div>
             {% endif %}

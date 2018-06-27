@@ -16,21 +16,21 @@
                 <div class="row">
                     <div class="col pishi-badge-container">
                         {% if predict.is_royal %}
-                            <i class="fas fa-crown royal-badge"></i>
+                            {% include 'icons/royal.html' %}
                         {% elif predict.is_full_house %}
-                            <i class="fas fa-home full-house-badge"></i>
+                            {% include 'icons/full_house.html' %}
                         {% elif predict.is_straight %}
-                            <i class="fas fa-venus-mars straight-badge"></i>
+                            {% include 'icons/straight.html' %}
                         {% else %}
-                            <i class="fas fa-blind one-pair-badge"></i>
+                            {% include 'icons/one_pair.html' %}
                         {% endif %}
                         {% if predict.is_straight %}
                             {% if match.rare_extra == ORACLE %}
-                                <i class="fas fa-bolt oracle-badge"></i>
+                                {% include 'icons/oracle.html' %}
                             {% elif match.rare_extra == NOSTRADAMUS %}
-                                <i class="fab fa-android nostradamus-badge"></i>
+                                {% include 'icons/nostradamus.html' %}
                             {% elif match.rare_extra == TRELAWNEY %}
-                                <i class="fas fa-glasses trelawney-badge"></i>
+                                {% include 'icons/trelawney.html' %}
                             {% endif %}
                         {% endif %}
                     </div>

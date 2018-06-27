@@ -24,20 +24,24 @@ def home(request):
     predictions = user.predictions.all()
     pairs=[]
     for match in matches:
+        summary = None
+        if match.finished:
+            summary = MatchSummary(match)
+
         found = False
         for predict in predictions:
             if predict.match_id == match.id:
                 if match.due:
-                    pairs.append((match, predict, None))
+                    pairs.append((match, summary, predict, None))
                 else:
-                    pairs.append((match, predict, SoccerMatchPredictionForm(instance=predict)))
+                    pairs.append((match, summary, predict, SoccerMatchPredictionForm(instance=predict)))
                 found = True
                 break
         if not found:
             if match.due:
-                pairs.append((match, None, None))
+                pairs.append((match, summary, None, None))
             else:
-                pairs.append((match, None, SoccerMatchPredictionForm()))
+                pairs.append((match, summary, None, SoccerMatchPredictionForm()))
 
     scores = Score.objects.all().order_by("-value")
 

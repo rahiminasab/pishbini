@@ -135,3 +135,7 @@ li:nth-child(odd) {
 .trelawney-badge {
     color: hotpink;
 }
+
+.match-summary-icon {
+    margin-left: 12px;
+}

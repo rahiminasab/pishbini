@@ -210,8 +210,39 @@ class Score(models.Model):
         return "%s: %s" % (self.user, self.value)
 
 
+class MatchSummary(object):
+
+    def __init__(self, match):
+        self.match = match
+        self.royal = self.full_house = self.straight = self.one_pair = 0
+        self.oracle = self.nostradamus = self.trelawney = 0
+        predicts = Predict.objects.filter(match=match)
+        for predict in predicts:
+            if predict.is_royal:
+                self.royal += 1
+            elif predict.is_full_house:
+                self.full_house += 1
+            elif predict.is_straight:
+                self.straight += 1
+            else:
+                self.one_pair += 1
+
+            # TODO: change this sheet!
+            if predict.is_straight:
+                if match.rare_extra == Badge.ORACLE:
+                    self.oracle += 1
+                elif match.rare_extra == Badge.NOSTRADAMUS:
+                    self.nostradamus += 1
+                elif match.rare_extra == Badge.TRELAWNEY:
+                    self.trelawney += 1
+
+    def __unicode__(self):
+        return "Royal: %s, Full_House: %s, Straight: %s, One_Pair: %s, Oracle: %s, Nostradamus: %s, Trelawney: %s"%\
+               (self.royal, self.full_house, self.straight, self.one_pair, self.oracle, self.nostradamus, self.trelawney)
+
+
 def persisted_object_list_to_dict(object_list):
-    dict = {}
+    dictionary = {}
     for obj in object_list:
-        dict.update({obj.id: obj})
-    return dict
+        dictionary.update({obj.id: obj})
+    return dictionary

@@ -1,0 +1,95 @@
+{% load tz %}
+{#  flags row  #}
+<div class="row">
+    <div class="col-5">
+        <img src="{{ match.home_team.flag }}" class="img-fluid team-flag">
+    </div>
+    <div class="col-2"></div>
+    <div class="col-5">
+        <img src="{{ match.away_team.flag }}" class="img-fluid team-flag">
+    </div>
+</div>
+
+{#  team names row  #}
+<div class="row match-list-item-info">
+    <div class="col-5">
+        <strong>{{ match.home_team }}</strong>
+    </div>
+    <div class="col-2"><small>vs</small></div>
+    <div class="col-5">
+        <strong>{{ match.away_team }}</strong>
+    </div>
+</div>
+
+{#  actual scores row  #}
+{% if match.finished %}
+    <div class="row match-list-item-info actual-scores-row">
+        <div class="col-5">
+            {{ match.home_result }}
+            {% if match.home_penalty %}
+                ({{ match.home_penalty }})
+            {% endif %}
+        </div>
+        <div class="col-2"><small><i class="fas fa-futbol"></i></small></div>
+        <div class="col-5">
+            {{ match.away_result }}
+            {% if match.away_penalty %}
+                ({{ match.away_penalty }})
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{#  date row  #}
+<div class="row match-list-item-info">
+    <div class="col"><small>{{ match.date | localtime | date:"D d M, h:i A" }}</small></div>
+</div>
+
+{% if summary %}
+    <div class="row match-list-item-info last-match-info text-muted">
+        <div class="col d-inline-flex justify-content-center">
+            {% if summary.royal > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fas fa-crown royal-badge"></i>
+                    <sub><small>{{ summary.royal }}</small></sub>
+                </div>
+            {% endif %}
+            {% if summary.full_house > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fas fa-home full-house-badge"></i>
+                    <sub><small>{{ summary.full_house }}</small></sub>
+                </div>
+            {% endif %}
+            {% if summary.straight > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fas fa-venus-mars straight-badge"></i>
+                    <sub><small>{{ summary.straight }}</small></sub>
+                </div>
+            {% endif %}
+            {% if summary.one_pair > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fas fa-sad-tear one-pair-badge"></i>
+                    <sub><small>{{ summary.one_pair }}</small></sub>
+                </div>
+            {% endif %}
+            {% if summary.oracle > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fas fa-bolt oracle-badge"></i>
+                    <sub><small>{{ summary.oracle }}</small></sub>
+                </div>
+            {% endif %}
+            {% if summary.nostradamus > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fab fa-android nostradamus-badge"></i>
+                    <sub><small>{{ summary.nostradamus }}</small></sub>
+                </div>
+            {% endif %}
+            {% if summary.trelawney > 0 %}
+                <div class="match-summary-icon">
+                    <i class="fas fa-glasses trelawney-badge"></i>
+                    <sub><small>{{ summary.trelawney }}</small></sub>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

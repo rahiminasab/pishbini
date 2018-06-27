@@ -236,6 +236,9 @@ class MatchSummary(object):
                 elif match.rare_extra == Badge.TRELAWNEY:
                     self.trelawney += 1
 
+        if self.oracle > 0 or self.nostradamus > 0 or self.trelawney > 0:
+            self.exceptional = True
+
     def __unicode__(self):
         return "Royal: %s, Full_House: %s, Straight: %s, One_Pair: %s, Oracle: %s, Nostradamus: %s, Trelawney: %s"%\
                (self.royal, self.full_house, self.straight, self.one_pair, self.oracle, self.nostradamus, self.trelawney)

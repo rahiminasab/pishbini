@@ -72,6 +72,11 @@
                     <sub><small>{{ summary.one_pair }}</small></sub>
                 </div>
             {% endif %}
+            {% if summary.exceptional %}
+                <div style="width: 10px;" class="border-right">
+
+                </div>
+            {% endif %}
             {% if summary.oracle > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/oracle.html' %}

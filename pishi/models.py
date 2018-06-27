@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from datetime import datetime
 import pytz
@@ -80,6 +82,14 @@ class Match(models.Model):
         else:
             super(Match, self).save(*args, **kwargs)
 
+    @property
+    def encoded_id(self):
+        return urlsafe_base64_encode(force_bytes(self.pk))
+
+    @staticmethod
+    def decode_id(encoded_id):
+        return urlsafe_base64_decode(encoded_id)
+
     def __unicode__(self):
         return "%s vs %s"%(self.home_team, self.away_team)
 
@@ -146,6 +156,9 @@ class Predict(models.Model):
 
     def save(self, *args, **kwargs):
         self.winner = self.get_winner()
+        if self.home_result != self.away_result:
+            self.home_penalty = None
+            self.away_penalty = None
         super(Predict, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -195,3 +208,10 @@ class Score(models.Model):
 
     def __unicode__(self):
         return "%s: %s" % (self.user, self.value)
+
+
+def persisted_object_list_to_dict(object_list):
+    dict = {}
+    for obj in object_list:
+        dict.update({obj.id: obj})
+    return dict

@@ -1,60 +1,39 @@
-<form class="predict-form" method="post" action="{% url 'submit_prediction' %}">
+<form class="predict-form" method="post" action="{% url 'submit_prediction' match.encoded_id %}" style="display: none">
     {% csrf_token %}
-    {% for error in form.non_field_errors %}
-        <div class="form-group has-errors text-danger small">
-            {{error}}
-        </div>
-    {% endfor %}
-{#    <input class="match_pk" type="hidden" value="{{ match.pk }}">#}
-    <input class="match_type" type="hidden" value="{{ match.type }}">
+    <input type="hidden" name="match_type" value="{{ match.type }}">
     <div class="row">
         <div class="col-5">
             <input placeholder="{{ match.home_team.fifa_code | upper }}"
-                   class="form-control form-control-sm home_result_prediction"
+                   class="form-control form-control-sm"
                    type="number"
-                   value="{{ predict.home_result }}"
-                   name="home_result_prediction" required>
+                   value="{{ form.home_result.value | default_if_none:"" }}"
+                   name="{{ form.home_result.name }}" required>
         </div>
         <div class="col-2">-</div>
         <div class="col-5">
             <input placeholder="{{ match.away_team.fifa_code | upper }}"
-                   class="form-control form-control-sm away_result_prediction"
+                   class="form-control form-control-sm"
                    type="number"
-<<<<<<< HEAD:pishi/templates/match/soccer/prediction_form.html
-                   value="{{ predict.away_result_predict }}"
-                   name="away_result" required>
-=======
-                   value="{{ predict.away_result }}"
-                   name="away_result_prediction" required>
->>>>>>> 68cbe596658fb915d66e63ca4ccca45dbeed24ba:pishi/templates/predict_form.html
+                   value="{{ form.away_result.value | default_if_none:"" }}"
+                   name="{{ form.away_result.name }}" required>
         </div>
     </div>
     {% if match.type != 0 %}
-        <div class="row penalty-predict-row" {% if not predict.home_penalty %} hidden {% endif %}>
+        <div class="row penalty-predict-row" {% if not form.home_penalty.value %} style="display: none" {% endif %}>
             <div class="col-5">
                 <input placeholder="penalty"
-                       class="form-control form-control-sm home_penalty_prediction"
+                       class="form-control form-control-sm"
                        type="number"
-<<<<<<< HEAD:pishi/templates/match/soccer/prediction_form.html
-                       value="{% if predict.home_penalty_predict %}{{ predict.home_penalty_predict }}{% endif %}"
-                       name="home_penalty">
-=======
-                       value="{% if predict.home_penalty %}{{ predict.home_penalty }}{% endif %}"
-                       name="home_penalty_prediction">
->>>>>>> 68cbe596658fb915d66e63ca4ccca45dbeed24ba:pishi/templates/predict_form.html
+                       value="{{ form.home_penalty.value | default_if_none:"" }}"
+                       name="{{ form.home_penalty.name }}">
             </div>
             <div class="col-2">-</div>
             <div class="col-5">
                 <input placeholder="penalty"
-                       class="form-control form-control-sm away_penalty_prediction"
+                       class="form-control form-control-sm"
                        type="number"
-<<<<<<< HEAD:pishi/templates/match/soccer/prediction_form.html
-                       value="{% if predict.away_penalty_predict %}{{ predict.away_penalty_predict }}{% endif %}"
+                       value="{{ form.away_penalty.value | default_if_none:"" }}"
                        name="away_penalty">
-=======
-                       value="{% if predict.away_penalty %}{{ predict.away_penalty }}{% endif %}"
-                       name="away_penalty_predict">
->>>>>>> 68cbe596658fb915d66e63ca4ccca45dbeed24ba:pishi/templates/predict_form.html
             </div>
         </div>
     {% endif %}

@@ -6,9 +6,9 @@
     </div>
     <div class="row match-list-item-info predicted-scores-row">
         <div class="col-5">
-            {{ predict.home_result_predict }}
-            {% if predict.home_penalty_predict %}
-                ({{ predict.home_penalty_predict }})
+            {{ predict.home_result }}
+            {% if predict.home_penalty %}
+                ({{ predict.home_penalty }})
             {% endif %}
         </div>
         <div class="col-2 text-nowrap jumbotron-fluid">
@@ -40,9 +40,9 @@
             {% endif %}
         </div>
         <div class="col-5">
-            {{ predict.away_result_predict }}
-            {% if predict.away_penalty_predict %}
-                ({{ predict.away_penalty_predict }})
+            {{ predict.away_result }}
+            {% if predict.away_penalty %}
+                ({{ predict.away_penalty }})
             {% endif %}
         </div>
     </div>

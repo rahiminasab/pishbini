@@ -27,66 +27,42 @@
         $('#scoreboard').show();
     });
 
-    $(document.body).on('click', '.predict-btn', function () {
-        let btnRow = $(this).closest('.predict-btn-row');
+    $(document.body).on('click', '.show-prediction-form-btn', function () {
+        let btnRow = $(this).closest('.show-prediction-form-btn-row');
         btnRow.hide();
-        btnRow.siblings('.predict-form-row').show();
+        btnRow.siblings('.predict-form').show();
     });
 
     $(document.body).on('click', '.predict-form-cancel-btn', function () {
-        let formRow = $(this).closest('.predict-form-row');
+        let formRow = $(this).closest('.predict-form');
         formRow.hide();
-        formRow.siblings('.predict-btn-row').show();
+        formRow.siblings('.show-prediction-form-btn-row').show();
     });
 
     $(document.body).on('change', '.predict-form', function () {
-       let home_r = parseInt($(this).find('.home_result_prediction').val()),
-           away_r = parseInt($(this).find('.away_result_prediction').val()),
-           match_type = parseInt($(this).find('.match_type').val());
-       if(home_r === 0 && away_r === 0 && match_type !== 0) {
-           $(this).find('.home_penalty_prediction').prop('required', true);
-           $(this).find('.away_penalty_prediction').prop('required', true);
-           $(this).find('.penalty-predict-row').removeAttr('hidden');
+       let home_result = parseInt($(this).find('input[name=home_result]').val()),
+           away_result = parseInt($(this).find('input[name=away_result]').val()),
+           match_type = parseInt($(this).find('input[name=match_type]').val());
+
+       if(home_result === away_result && match_type !== 0) {
+           $(this).find('input[name=home_penalty]').prop('required', true);
+           $(this).find('input[name=away_penalty]').prop('required', true);
            $(this).find('.penalty-predict-row').show();
-       } else if(!isNaN(home_r) && !isNaN(away_r) && match_type !== 0 && (home_r !== 0 || away_r !== 0)) {
-           $(this).find('.home_penalty_prediction').prop('required', false);
-           $(this).find('.away_penalty_prediction').prop('required', false);
+       } else if(!isNaN(home_result) && !isNaN(away_result) && match_type !== 0 && !(home_result === away_result)) {
+           $(this).find('input[name=home_penalty]').prop('required', false).attr('value', '');
+           $(this).find('input[name=away_penalty]').prop('required', false).attr('value', '');
            $(this).find('.penalty-predict-row').hide();
        }
     });
 
-    // $(document.body).on('submit', '.predict-form', function (e) {
-    //     e.preventDefault();
-    //     let home_r = parseInt($(this).find('.home_result_prediction').val()),
-    //         away_r = parseInt($(this).find('.away_result_prediction').val()),
-    //         match_pk = parseInt($(this).find('.match_pk').val()),
-    //         match_type = parseInt($(this).find('.match_type').val());
-    //     let data = {"home_r": home_r, "away_r": away_r, "match_pk": match_pk};
-    //
-    //     if(match_type !== 0 && home_r === 0 && away_r === 0) {
-    //         data["home_p"] = parseInt($(this).find('.home_penalty_prediction').val());
-    //         data["away_p"] = parseInt($(this).find('.away_penalty_prediction').val());
-    //     }
-    //     let parent_li = $(this).closest('li');
-    //     $.post('/predict/', data)
-    //         .done(function (result) {
-    //             parent_li.html(result);
-    //         })
-    // });
-
-    $(document.body).on('click', '.predict-edit-btn', function () {
-        let parentRow = $(this).closest('.predict-edit-btn-row');
-        parentRow.hide();
-        parentRow.siblings('.predicted-info-div').hide();
-        parentRow.siblings('.predict-form-row').show();
-
-    });
-
-    $(document.body).on('click', '.predict-edit-cancel-button', function () {
-        let parentRow = $(this).closest('.predict-form-row');
-        parentRow.siblings('.predicted-info-div').show();
-        parentRow.siblings('.predict-edit-btn-row').show();
-        parentRow.hide();
+    $(document.body).on('submit', '.predict-form', function (e) {
+        e.preventDefault();
+        let match_list_item = $(this).closest('li');
+        let route = $(this).attr('action');
+        $.post(route, $(this).serialize())
+            .done(function (data) {
+                match_list_item.html(data);
+            });
     });
 
     $(document.body).on('click', '#what_are_rules', function () {

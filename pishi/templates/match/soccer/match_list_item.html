@@ -1,16 +1,30 @@
 <div class="row justify-content-center">
     <div class="col-9 col-md-8 col-xl-9">
         {% include 'match/soccer/teams_info.html' with match=match %}
-        {#  prediction init row  #}
-        {% if not match.due and not match.finished and not predict %}
-            {% include 'match/soccer/prediction_add_row.html' with match=match form=form %}
-        {% endif %}
-        {#  prediction done row  #}
+
         {% if predict %}
             {% include 'match/soccer/prediction_info_row.html' with match=match predict=predict %}
-            {% if not match.due %}
-                {% include 'match/soccer/prediction_edit_row.html' with match=match predict=predict form=form %}
-            {% endif %}
+        {% elif not predict and not match.due %}
+            <div class="row match-list-item-info show-prediction-form-btn-row">
+                <div class="col">
+                    <button class="btn btn-primary btn-sm show-prediction-form-btn">predict</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if not match.due and predict %}
+            <div class="row match-list-item-info show-prediction-form-btn-row">
+                <div class="col">
+                   <button class="btn btn-sm show-prediction-form-btn predict-edit-btn">edit</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if form %}
+            {% for error in form.non_field_errors %}
+                <div class="form-group has-errors text-danger small">
+                    {{error}}
+                </div>
+            {% endfor %}
+            {% include 'match/soccer/prediction_form.html' with match=match predict=predict form=form %}
         {% endif %}
     </div>
 </div>

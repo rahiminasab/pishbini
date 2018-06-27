@@ -4,5 +4,5 @@ import views as match_views
 
 
 urlpatterns = [
-    url(r'^predict/', match_views.submit_prediction, name='submit_prediction'),
+    url(r'^predict/(?P<match_id>[0-9A-Za-z_\-]+)/$', match_views.submit_prediction, name='submit_prediction'),
 ]

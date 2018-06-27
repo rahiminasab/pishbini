@@ -27,11 +27,17 @@ def home(request):
         found = False
         for predict in predictions:
             if predict.match_id == match.id:
-                pairs.append((match, predict, SoccerMatchPredictionForm()))
+                if match.due:
+                    pairs.append((match, predict, None))
+                else:
+                    pairs.append((match, predict, SoccerMatchPredictionForm(instance=predict)))
                 found = True
                 break
         if not found:
-            pairs.append((match, None))
+            if match.due:
+                pairs.append((match, None, None))
+            else:
+                pairs.append((match, None, SoccerMatchPredictionForm()))
 
     scores = Score.objects.all().order_by("-value")
 

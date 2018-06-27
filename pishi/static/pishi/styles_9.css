@@ -61,10 +61,8 @@ li:nth-child(odd) {
     font-size: x-large;
 }
 
-.last-match-info {
-    border-bottom: 1px black solid;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
+.predicted-info-div {
+    padding-top: 15px;
 }
 
 .predicted-scores-row {

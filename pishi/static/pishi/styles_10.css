@@ -115,11 +115,11 @@ li:nth-child(odd) {
 }
 
 .straight-badge {
-    color: red;
+    color: #009688;
 }
 
 .one-pair-badge {
-    color: #7b90f7;
+    color: #e91e63;
 }
 
 .oracle-badge {

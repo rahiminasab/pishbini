@@ -26,10 +26,18 @@ class Team(models.Model):
 
 class Match(models.Model):
     GROUP = 0
-    KNOCKOUT = 1
+    ROUND16 = 1
+    ROUND8 = 2
+    ROUND4 = 3
+    ROUND2_LOSER = 4
+    ROUND2 = 5
     MATCH_TYPES = (
         (GROUP, "Group"),
-        (KNOCKOUT, "Knock out")
+        (ROUND16, "Round of 16"),
+        (ROUND8, "Quarter Finals"),
+        (ROUND4, "Semi Finals"),
+        (ROUND2_LOSER, "Third Place play-off"),
+        (ROUND2, "Final")
     )
     type = models.PositiveIntegerField(choices=MATCH_TYPES)
     home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE)
@@ -41,7 +49,6 @@ class Match(models.Model):
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     finished = models.BooleanField(default=False)
     winner = models.ForeignKey(Team, null=True, blank=True)
-    #rare_extra = models.IntegerField(default=-1)
     exceptional_badge = models.PositiveIntegerField(choices=Badge.exceptional_types, null=True, blank=True)
     summary = models.OneToOneField("MatchSummary", related_name="match", on_delete=models.CASCADE, null=True, blank=True)
 
@@ -211,10 +218,3 @@ class Score(models.Model):
 
     def __unicode__(self):
         return "%s: %s" % (self.user, self.value)
-
-
-def persisted_object_list_to_dict(object_list):
-    dictionary = {}
-    for obj in object_list:
-        dictionary.update({obj.id: obj})
-    return dictionary

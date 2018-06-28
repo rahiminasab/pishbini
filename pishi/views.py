@@ -21,31 +21,18 @@ def home(request):
         return registrar.user_activation_required(request)
 
     matches = Match.objects.all().order_by('-date')
-    predictions = user.predictions.all()
-    pairs=[]
+    predictions = {predict.match.id: predict for predict in user.predictions.all()}
+    pairs = []
     for match in matches:
-        summary = None
-        if match.finished:
-            summary = MatchSummary(match)
-
-        found = False
-        for predict in predictions:
-            if predict.match_id == match.id:
-                if match.due:
-                    pairs.append((match, summary, predict, None))
-                else:
-                    pairs.append((match, summary, predict, SoccerMatchPredictionForm(instance=predict)))
-                found = True
-                break
-        if not found:
-            if match.due:
-                pairs.append((match, summary, None, None))
-            else:
-                pairs.append((match, summary, None, SoccerMatchPredictionForm()))
+        prediction = predictions.get(match.id)
+        if match.due:
+            pairs.append((match, prediction , None))
+        else:
+            pairs.append((match, prediction, SoccerMatchPredictionForm(instance=prediction)))
 
     scores = Score.objects.all().order_by("-value")
 
     data = {"pairs": pairs, "scores": scores}
-    data.update(Badge.DICT)
+    data.update(Badge.score_dict)
 
     return render(request, "index.html", data)

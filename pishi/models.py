@@ -2,11 +2,13 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from datetime import datetime
 import pytz
+
+from badge import *
 
 
 class Team(models.Model):
@@ -39,8 +41,9 @@ class Match(models.Model):
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     finished = models.BooleanField(default=False)
     winner = models.ForeignKey(Team, null=True, blank=True)
-    rare_extra = models.IntegerField(default=-1)
-    is_past = False
+    #rare_extra = models.IntegerField(default=-1)
+    exceptional_badge = models.PositiveIntegerField(choices=Badge.exceptional_types, null=True, blank=True)
+    summary = models.OneToOneField("MatchSummary", related_name="match", on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def due(self):
@@ -60,25 +63,28 @@ class Match(models.Model):
             return self.away_team
 
     def save(self, *args, **kwargs):
-        if self.finished and self.rare_extra == -1:
+        if self.finished and not self.exceptional_badge:
             self.winner = self.get_winner()
             tot_count = Predict.objects.filter(match=self).count()
             if tot_count > 0:
                 err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
                 p_val = (tot_count-err_count)/float(tot_count)
                 if p_val < 0.2:
-                    self.rare_extra = Badge.ORACLE
+                    self.exceptional_badge = Badge.ORACLE
                 elif p_val < 0.3:
-                    self.rare_extra = Badge.NOSTRADAMUS
+                    self.exceptional_badge = Badge.NOSTRADAMUS
                 elif p_val < 0.4:
-                    self.rare_extra = Badge.TRELAWNEY
+                    self.exceptional_badge = Badge.TRELAWNEY
                 else:
-                    self.rare_extra = 0
+                    self.exceptional_badge = Badge.NOTHING
             else:
-                self.rare_extra = 0
+                self.exceptional_badge = Badge.NOTHING
+
+            self.summary = MatchSummary.objects.create()
 
             super(Match, self).save(*args, **kwargs)
-            Score.update_scores_for(self)
+
+            Predict.update_predictions_for(self)
         else:
             super(Match, self).save(*args, **kwargs)
 
@@ -94,6 +100,16 @@ class Match(models.Model):
         return "%s vs %s"%(self.home_team, self.away_team)
 
 
+class MatchSummary(models.Model):
+    royals = models.PositiveIntegerField(default=0)
+    full_houses = models.PositiveIntegerField(default=0)
+    straights = models.PositiveIntegerField(default=0)
+    one_pairs = models.PositiveIntegerField(default=0)
+    oracles = models.PositiveIntegerField(default=0)
+    nostradamuses = models.PositiveIntegerField(default=0)
+    trelawneies = models.PositiveIntegerField(default=0)
+
+
 class Predict(models.Model):
     user = models.ForeignKey(User, related_name="predictions", on_delete=models.CASCADE)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
@@ -102,6 +118,8 @@ class Predict(models.Model):
     home_penalty = models.PositiveIntegerField(null=True, blank=True)
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     winner = models.ForeignKey(Team, null=True, blank=False)
+    normal_badge = models.PositiveIntegerField(choices=Badge.normal_types, null=True, blank=True)
+    exceptional_badge = models.PositiveIntegerField(choices=Badge.exceptional_types, null=True, blank=True)
 
     class Meta:
         unique_together = ('user', 'match',)
@@ -119,7 +137,6 @@ class Predict(models.Model):
         else:
             return self.match.away_team
 
-    @property
     def is_royal(self):
         if self.home_result == self.match.home_result and self.away_result == self.match.away_result:
             if self.match.home_penalty:
@@ -127,62 +144,64 @@ class Predict(models.Model):
             return True
         return False
 
-    @property
     def is_full_house(self):
         return self.home_result - self.away_result == self.match.home_result - self.match.away_result
 
-    @property
     def is_straight(self):
         return self.winner == self.match.winner
 
-    @property
     def value(self):
-
         if not self.match.finished:
             return 0
-
-        if self.is_straight:
-            if self.is_royal:
-                val = Badge.ROYAL
-            elif self.is_full_house:
-                val = Badge.FULL_HOUSE
-            else:
-                val = Badge.STRAIGHT
-            val += self.match.rare_extra
-        else:
-            val = Badge.ONE_PAIR
-
-        return val
+        return Badge.get_value(self.normal_badge) + Badge.get_value(self.exceptional_badge)
 
     def save(self, *args, **kwargs):
-        self.winner = self.get_winner()
         if self.home_result != self.away_result:
             self.home_penalty = None
             self.away_penalty = None
+
+        if not self.normal_badge and self.match.finished:
+            self.winner = self.get_winner()
+            if self.is_royal():
+                self.normal_badge = Badge.ROYAL
+                self.match.summary.royals += 1
+            elif self.is_full_house():
+                self.normal_badge = Badge.FULL_HOUSE
+                self.match.summary.full_houses += 1
+            elif self.is_straight():
+                self.normal_badge = Badge.STRAIGHT
+                self.match.summary.straights += 1
+            else:
+                self.normal_badge = Badge.ONE_PAIR
+                self.match.summary.one_pairs += 1
+
+            if self.is_straight():
+                self.exceptional_badge = self.match.exceptional_badge
+                if self.exceptional_badge == Badge.ORACLE:
+                    self.match.summary.oracles += 1
+                elif self.exceptional_badge == Badge.NOSTRADAMUS:
+                    self.match.summary.nostradamuses += 1
+                elif self.exceptional_badge == Badge.TRELAWNEY:
+                    self.match.summary.trelawneies += 1
+            self.match.summary.save()
+
         super(Predict, self).save(*args, **kwargs)
+
+    @staticmethod
+    def update_predictions_for(match):
+        predictions = Predict.objects.filter(match=match)
+        for predict in predictions:
+            predict.save()
+            try:
+                score_obj = Score.objects.get(user=predict.user)
+                score_obj.num_predicted += 1
+            except Score.DoesNotExist:
+                score_obj = Score(user=predict.user, num_predicted=1)
+            score_obj.value += predict.value()
+            score_obj.save()
 
     def __unicode__(self):
         return "%s-%s: %s-%s"%(self.user, self.match, self.home_result, self.away_result)
-
-
-class Badge(object):
-    ROYAL = 20
-    FULL_HOUSE = 12
-    STRAIGHT = 8
-    ONE_PAIR = 2
-    ORACLE = 20
-    NOSTRADAMUS = 15
-    TRELAWNEY = 10
-
-    DICT = {
-        "ROYAL": ROYAL,
-        "FULL_HOUSE": FULL_HOUSE,
-        "STRAIGHT": STRAIGHT,
-        "ONE_PAIR": ONE_PAIR,
-        "ORACLE": ORACLE,
-        "NOSTRADAMUS":NOSTRADAMUS,
-        "TRELAWNEY": TRELAWNEY
-    }
 
 
 class Score(models.Model):
@@ -190,58 +209,8 @@ class Score(models.Model):
     value = models.FloatField(default=0)
     num_predicted = models.PositiveIntegerField(default=0)
 
-    @property
-    def normalized_value(self):
-        return (self.value/self.num_predicted)*(self.num_predicted**0.2)
-
-    @staticmethod
-    def update_scores_for(match):
-        predicts = Predict.objects.filter(match=match)
-        for predict in predicts:
-            try:
-                score_obj = Score.objects.get(user=predict.user)
-                score_obj.num_predicted += 1
-            except Score.DoesNotExist:
-                score_obj = Score(user=predict.user, num_predicted=1)
-            score_obj.value += predict.value
-            score_obj.save()
-
     def __unicode__(self):
         return "%s: %s" % (self.user, self.value)
-
-
-class MatchSummary(object):
-
-    def __init__(self, match):
-        self.match = match
-        self.royal = self.full_house = self.straight = self.one_pair = 0
-        self.oracle = self.nostradamus = self.trelawney = 0
-        predicts = Predict.objects.filter(match=match)
-        for predict in predicts:
-            if predict.is_royal:
-                self.royal += 1
-            elif predict.is_full_house:
-                self.full_house += 1
-            elif predict.is_straight:
-                self.straight += 1
-            else:
-                self.one_pair += 1
-
-            # TODO: change this sheet!
-            if predict.is_straight:
-                if match.rare_extra == Badge.ORACLE:
-                    self.oracle += 1
-                elif match.rare_extra == Badge.NOSTRADAMUS:
-                    self.nostradamus += 1
-                elif match.rare_extra == Badge.TRELAWNEY:
-                    self.trelawney += 1
-
-        if self.oracle > 0 or self.nostradamus > 0 or self.trelawney > 0:
-            self.exceptional = True
-
-    def __unicode__(self):
-        return "Royal: %s, Full_House: %s, Straight: %s, One_Pair: %s, Oracle: %s, Nostradamus: %s, Trelawney: %s"%\
-               (self.royal, self.full_house, self.straight, self.one_pair, self.oracle, self.nostradamus, self.trelawney)
 
 
 def persisted_object_list_to_dict(object_list):

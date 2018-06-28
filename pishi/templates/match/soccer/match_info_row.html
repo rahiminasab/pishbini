@@ -45,54 +45,54 @@
     <div class="col"><small>{{ match.date | localtime | date:"D d M, h:i A" }}</small></div>
 </div>
 
-{% if summary %}
+{% if match.summary %}
     <div class="row match-list-item-info text-muted">
         <div class="col d-inline-flex justify-content-center">
-            {% if summary.royal > 0 %}
+            {% if match.summary.royals > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/royal.html' %}
-                    <sub><small>{{ summary.royal }}</small></sub>
+                    <sub><small>{{ match.summary.royals }}</small></sub>
                 </div>
             {% endif %}
-            {% if summary.full_house > 0 %}
+            {% if match.summary.full_houses > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/full_house.html' %}
-                    <sub><small>{{ summary.full_house }}</small></sub>
+                    <sub><small>{{ match.summary.full_houses }}</small></sub>
                 </div>
             {% endif %}
-            {% if summary.straight > 0 %}
+            {% if match.summary.straights > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/straight.html' %}
-                    <sub><small>{{ summary.straight }}</small></sub>
+                    <sub><small>{{ match.summary.straights }}</small></sub>
                 </div>
             {% endif %}
-            {% if summary.one_pair > 0 %}
+            {% if match.summary.one_pairs > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/one_pair.html' %}
-                    <sub><small>{{ summary.one_pair }}</small></sub>
+                    <sub><small>{{ match.summary.one_pairs }}</small></sub>
                 </div>
             {% endif %}
-            {% if summary.exceptional %}
-                <div style="width: 10px;" class="border-right">
-
-                </div>
-            {% endif %}
-            {% if summary.oracle > 0 %}
+{#            {% if match.summary.exceptional %}#}
+{#                <div style="width: 10px;" class="border-right">#}
+{##}
+{#                </div>#}
+{#            {% endif %}#}
+            {% if match.summary.oracles > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/oracle.html' %}
-                    <sub><small>{{ summary.oracle }}</small></sub>
+                    <sub><small>{{ match.summary.oracles }}</small></sub>
                 </div>
             {% endif %}
-            {% if summary.nostradamus > 0 %}
+            {% if match.summary.nostradamuses > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/nostradamus.html' %}
-                    <sub><small>{{ summary.nostradamus }}</small></sub>
+                    <sub><small>{{ match.summary.nostradamuses }}</small></sub>
                 </div>
             {% endif %}
-            {% if summary.trelawney > 0 %}
+            {% if match.summary.trelawneies > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/trelawney.html' %}
-                    <sub><small>{{ summary.trelawney }}</small></sub>
+                    <sub><small>{{ match.summary.trelawneies }}</small></sub>
                 </div>
             {% endif %}
         </div>

@@ -40,7 +40,7 @@ class Badge(object):
             return BadgeScore.TRELAWNEY
         return 0
 
-    score_dict = {
+    index_dict = {
         "ROYAL": ROYAL,
         "FULL_HOUSE": FULL_HOUSE,
         "STRAIGHT": STRAIGHT,

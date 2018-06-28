@@ -25,11 +25,11 @@
                             {% include 'icons/one_pair.html' %}
                         {% endif %}
                         {% if predict.is_straight %}
-                            {% if match.rare_extra == ORACLE %}
+                            {% if match.exceptional_badge == ORACLE %}
                                 {% include 'icons/oracle.html' %}
-                            {% elif match.rare_extra == NOSTRADAMUS %}
+                            {% elif match.exceptional_badge == NOSTRADAMUS %}
                                 {% include 'icons/nostradamus.html' %}
-                            {% elif match.rare_extra == TRELAWNEY %}
+                            {% elif match.exceptional_badge == TRELAWNEY %}
                                 {% include 'icons/trelawney.html' %}
                             {% endif %}
                         {% endif %}

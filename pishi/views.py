@@ -33,6 +33,6 @@ def home(request):
     scores = Score.objects.all().order_by("-value")
 
     data = {"pairs": pairs, "scores": scores}
-    data.update(Badge.score_dict)
+    data.update(Badge.index_dict)
 
     return render(request, "index.html", data)

@@ -33,5 +33,5 @@ def submit_prediction(request, match_id):
         prediction = init_prediction
 
     data = {"match": match, "predict": prediction, "form": form}
-    data.update(Badge.score_dict)
+    data.update(Badge.index_dict)
     return render(request, 'match/soccer/match_list_item.html', data)

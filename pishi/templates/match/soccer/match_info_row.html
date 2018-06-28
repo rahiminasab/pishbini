@@ -72,11 +72,11 @@
                     <sub><small>{{ match.summary.one_pairs }}</small></sub>
                 </div>
             {% endif %}
-{#            {% if match.summary.exceptional %}#}
-{#                <div style="width: 10px;" class="border-right">#}
-{##}
-{#                </div>#}
-{#            {% endif %}#}
+            {% if match.summary.oracles > 0 or match.summary.nostradamuses > 0 or match.summary.trelawneies > 0  %}
+                <div style="width: 10px;" class="border-right">
+
+                </div>
+            {% endif %}
             {% if match.summary.oracles > 0 %}
                 <div class="match-summary-icon">
                     {% include 'icons/oracle.html' %}

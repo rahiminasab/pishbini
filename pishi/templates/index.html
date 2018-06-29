@@ -1,31 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <nav class="row justify-content-center">
-        <div class="nav nav-tabs col-lg-7" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active"
-               id="nav-predictions-tab"
-               data-toggle="tab"
-               href="#predictions"
-               role="tab"
-               aria-controls="nav-predictions"
-               aria-selected="true">Plays</a>
-            <a class="nav-item nav-link"
-               id="nav-scoreboard-tab"
-               data-toggle="tab"
-               href="#scoreboard"
-               role="tab"
-               aria-controls="nav-scoreboard"
-               aria-selected="false">ScoreBoard</a>
-        </div>
-    </nav>
-    <div class="tab-content row justify-content-center" id="nav-tabContent">
-        <div id="predictions" class="tab-pain fade show active col-lg-7" role="tabpanel" aria-labelledby="nav-predictions-tab">
-            {% include 'match/soccer/match_list.html' %}
-        </div>
-        <div style="display: none" id="scoreboard" class="tab-pain fade col col-lg-7" role="tabpanel" aria-labelledby="nav-scoreboard-tab">
-            {% include 'scoreboard.html' %}
+    <div class="row justify-content-center content-wrapper">
+        <div class="col-lg-8" >
+            <div id="initial-start-message-wrapper" class="row border-bottom mb-3">
+                <div class="col">
+                    <p class="lead">Start by choosing a Match Set from below.</p>
+                </div>
+            </div>
+            <div class="card-columns">
+                {% include 'match/match_set_cards.html' %}
+            </div>
+            <div id="matches_container" style="display: none"></div>
         </div>
     </div>
-
 {% endblock %}

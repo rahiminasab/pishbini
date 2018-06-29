@@ -75,6 +75,36 @@
         $('.scores-list').show();
     });
 
+    $(document.body).on('click', '.match-set-card', function () {
+        let route = $(this).attr("data-route");
+        let cardsContainer = $(this).parents('.card-columns');
+        let matchesContainer = $('#matches_container');
+        $.get(route)
+            .done(function (data) {
+                $('#initial-start-message-wrapper').hide();
+                cardsContainer.hide();
+                matchesContainer.html(data).show()
+            });
+    });
+
+    $(document.body).on('click', '.match-list-header i', function () {
+        let matchesContainer = $('#matches_container');
+        let cardsContainer = matchesContainer.siblings('.card-columns');
+        matchesContainer.hide();
+        $('#initial-start-message-wrapper').show();
+        cardsContainer.show();
+    });
+
+    let card_colors = [{"c": "white", "bg-c": "#650000", "title-c": "#ff9800"}, {"c": "#231919", "bg-c": "#e9d3ff", "title-c": "#6151b9" },
+        {"c": "floralwhite", "bg-c": "#ef2c00", "title-c": "#e4f12c"} ];
+
+    $('.match-set-info')
+        .each(function (i) {
+            $(this).css("background-color", card_colors[i%card_colors.length]["bg-c"])
+                .css("color", card_colors[i%card_colors.length]["c"]);
+            $(this).find('.card-title').css("color", card_colors[i%card_colors.length]["title-c"]);
+        });
+
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {

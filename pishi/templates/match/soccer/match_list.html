@@ -1,6 +1,15 @@
 <ul class="list-group">
-    <li class="list-group-item active sticky-top">
-        <strong>Fifa 2018 Matches</strong>
+    <li class="list-group-item active sticky-top match-list-header">
+        <div class="row">
+            <div class="col-1">
+                <i class="fas fa-chevron-left fa-2x"></i>
+            </div>
+            <div class="col text-center pr-5 mr-lg-5">
+                <strong>{{ match_set.name }}</strong>
+            </div>
+        </div>
+
+
     </li>
     {% for match, prediction, form in pairs %}
         <li class="list-group-item text-center">

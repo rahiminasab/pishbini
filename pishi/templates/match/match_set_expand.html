@@ -1,0 +1,26 @@
+<nav class="justify-content-center">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active"
+           id="nav-predictions-tab"
+           data-toggle="tab"
+           href="#predictions"
+           role="tab"
+           aria-controls="nav-predictions"
+           aria-selected="true">Matches</a>
+        <a class="nav-item nav-link"
+           id="nav-scoreboard-tab"
+           data-toggle="tab"
+           href="#scoreboard"
+           role="tab"
+           aria-controls="nav-scoreboard"
+           aria-selected="false">ScoreBoard</a>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div id="predictions" class="tab-pain fade show active" role="tabpanel" aria-labelledby="nav-predictions-tab">
+        {% include 'match/soccer/match_list.html' %}
+    </div>
+    <div style="display: none" id="scoreboard" class="tab-pain fade" role="tabpanel" aria-labelledby="nav-scoreboard-tab">
+        {% include 'scoreboard.html' %}
+    </div>
+</div>

@@ -1,16 +1,62 @@
 {% load static %}
-
-<div class="row justify-content-center">
-    <nav class="navbar header-nav col-lg-7">
+{% comment %}<nav class="navbar header-nav">
+    <div class="row">
+        <div class="col">
         <img class="navbar-brand logo" src="{% static 'pishi/images/kitten.png' %}" alt="pishi">
-        {% if user.is_authenticated %}
-            <a class="float-right btn btn-danger"  href="{% url 'logout' %}">Logout</a>
-        {% endif %}
-    </nav>
-</div>
-<div class="row justify-content-center">
-    <div class="jumbotron col-lg-7">
-        <h1 class="display-4 text-center">Welcome to Piishi!</h1>
-        <p class="lead text-center">Try to have the best prediction of match results and win an invaluable prize.</p>
+
     </div>
+    <div class="col">
+        {% if user.is_authenticated %}
+            <form>
+            <div class="input-group">
+                <input id="search_match_set_input"
+                       type="text"
+                       class="form-control"
+                       name="match_set_search_term"
+                       value=""
+                       placeholder="Search for match sets..." required>
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+    <div class="col">
+        {% if user.is_authenticated %}
+            <a class="float-right"  href="{% url 'logout' %}"><i class="fas fa-sign-out-alt sign-out-ico"></i></a>
+        {% endif %}
+    </div>
+    </div>
+</nav>{% endcomment %}
+<div class="row justify-content-center">
+
+<nav class="navbar navbar-expand-lg navbar-light header-nav col-lg-8">
+{#    <a class="navbar-brand" href="#"><img class="navbar-brand logo" src="{% static 'pishi/images/kitten.png' %}" alt="pishi"></a>#}
+    <div class="navbar-brand">
+        <img class="navbar-brand logo" src="{% static 'pishi/images/kitten.png' %}" alt="pishi">
+        <span style="margin-left:-0.5em;font-size: x-large;color: #84391d;">Piishi</span>
+    </div>
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            {% if user.is_authenticated %}
+                <li class="nav-item active mr-5 text-center">
+                    <a class="nav-link lead" href="{% url 'logout' %}">Sign out<span class="m-2">
+                        <i class="fas fa-sign-out-alt sign-out-ico"></i></span>
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+  </div>
+</nav>
 </div>

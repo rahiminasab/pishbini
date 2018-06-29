@@ -1,0 +1,45 @@
+{% for match_set in match_sets %}
+    <div data-route="/match-set/{{ match_set.encoded_id }}" class="card bg-light border-secondary match-set-card">
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <img style="max-width: 130px;" class="card-img-top" src="{{ match_set.flag }}" alt="Card image cap">
+            </div>
+        </div>
+        <div class="card-body match-set-info">
+          <h5 class="card-title">{{ match_set.name }}</h5>
+          <p class="card-text">
+              {{ match_set.location }} ({{ match_set.start_date }}-{{ match_set.end_date }})
+          </p>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col d-flex justify-content-around">
+                    {% if match_set.summary.royals > 0 %}
+                        <div class="match-summary-icon">
+                            {% include 'icons/royal.html' %}
+                            <sub><small>{{ match_set.summary.royals }}</small></sub>
+                        </div>
+                    {% endif %}
+                    {% if match_set.summary.full_houses > 0 %}
+                        <div class="match-summary-icon">
+                            {% include 'icons/full_house.html' %}
+                            <sub><small>{{ match_set.summary.full_houses }}</small></sub>
+                        </div>
+                    {% endif %}
+                    {% if match_set.summary.straights > 0 %}
+                        <div class="match-summary-icon">
+                            {% include 'icons/straight.html' %}
+                            <sub><small>{{ match_set.summary.straights }}</small></sub>
+                        </div>
+                    {% endif %}
+                    {% if match_set.summary.one_pairs > 0 %}
+                        <div class="match-summary-icon">
+                            {% include 'icons/one_pair.html' %}
+                            <sub><small>{{ match_set.summary.one_pairs }}</small></sub>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

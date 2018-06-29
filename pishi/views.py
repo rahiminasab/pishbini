@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from models import *
 from match.forms import SoccerMatchPredictionForm
 
 
+@ensure_csrf_cookie
 def index(request):
-    return HttpResponseRedirect(reverse("login"))
+    return home(request)
 
 
 def home(request):
@@ -20,19 +22,7 @@ def home(request):
         import registrar.views as registrar
         return registrar.user_activation_required(request)
 
-    matches = Match.objects.all().order_by('-date')
-    predictions = {predict.match.id: predict for predict in user.predictions.all()}
-    pairs = []
-    for match in matches:
-        prediction = predictions.get(match.id)
-        if match.due:
-            pairs.append((match, prediction , None))
-        else:
-            pairs.append((match, prediction, SoccerMatchPredictionForm(instance=prediction)))
+    match_sets = MatchSet.objects.filter(finished=False).all()
 
-    scores = Score.objects.all().order_by("-value")
+    return render(request, "index.html", {"match_sets": match_sets})
 
-    data = {"pairs": pairs, "scores": scores}
-    data.update(Badge.index_dict)
-
-    return render(request, "index.html", data)

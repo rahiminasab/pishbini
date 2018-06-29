@@ -27,13 +27,22 @@ li:nth-child(odd) {
 /* header stuff*/
 
 .header-nav {
-    background-color: #5899c7!important;
+    background-color: #efd796bd;
 }
 
 .logo {
-    max-width: 80px;
+    max-width: 36px;
+}
+
+.sign-out-ico {
+    color: black;
+    padding-left: 5px;
 }
 /*--------------------------*/
+
+.content-wrapper {
+    margin-top: 20px;
+}
 
 #nav-tab {
     font-size: 1.2em;
@@ -136,4 +145,50 @@ li:nth-child(odd) {
 
 .match-summary-icon {
     margin-left: 12px;
+}
+
+.match-set-card {
+    cursor: pointer;
+    max-width: 400px;
+}
+
+.match-list-header i {
+    margin-left: -10px;
+    cursor: pointer;
+}
+
+.match-list-header strong {
+    margin-left: 15px;
+}
+
+@media (min-width: 34em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
 }

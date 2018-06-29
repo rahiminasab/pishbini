@@ -6,6 +6,10 @@ class TeamAdmin(admin.ModelAdmin):
     pass
 
 
+class MatchSetAdmin(admin.ModelAdmin):
+    pass
+
+
 class MatchAdmin(admin.ModelAdmin):
     pass
 
@@ -19,6 +23,7 @@ class ScoreAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Team, TeamAdmin)
+admin.site.register(MatchSet, MatchSetAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Predict, PredictAdmin)
 admin.site.register(Score, ScoreAdmin)

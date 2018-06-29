@@ -6,7 +6,33 @@ from django.views.decorators.http import require_POST
 from copy import copy
 
 from .forms import SoccerMatchPredictionForm
-from ..models import Match, Badge, Predict
+from ..models import MatchSet, Match, Badge, Predict, Score
+
+
+def render_matches(request, match_set_id):
+    try:
+        match_set = MatchSet.objects.get(id=MatchSet.decode_id(match_set_id))
+    except MatchSet.DoesNotExist:
+        return HttpResponseBadRequest("No MatchSet found with requested id=%s" % match_set_id)
+
+    user = request.user
+    matches = match_set.matches.all().order_by('-date')
+    predictions = {predict.match.id: predict for predict in user.predictions.all()}
+    pairs = []
+    for match in matches:
+        prediction = predictions.get(match.id)
+        if match.due:
+            pairs.append((match, prediction, None))
+        else:
+            pairs.append((match, prediction, SoccerMatchPredictionForm(instance=prediction)))
+
+    scores = match_set.scores.all().order_by("-value")
+
+    data = {"match_set": match_set, "pairs": pairs, "scores": scores}
+    data.update(Badge.index_dict)
+
+    return render(request, 'match/match_set_expand.html', data)
+
 
 
 @require_POST

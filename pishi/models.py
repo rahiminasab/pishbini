@@ -24,6 +24,29 @@ class Team(models.Model):
         return self.name
 
 
+class MatchSet(models.Model):
+    name = models.CharField(max_length=50)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    location = models.CharField(max_length=100)
+    finished = models.BooleanField(default=False)
+    winner = models.ForeignKey(Team, null=True, blank=True)
+    flag = models.URLField(null=True)
+    summary = models.OneToOneField("MatchSetSummary", related_name="match_set", on_delete=models.CASCADE, null=True,
+                                   blank=True)
+
+    @property
+    def encoded_id(self):
+        return urlsafe_base64_encode(force_bytes(self.pk))
+
+    @staticmethod
+    def decode_id(encoded_id):
+        return urlsafe_base64_decode(encoded_id)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Match(models.Model):
     GROUP = 0
     ROUND16 = 1
@@ -39,6 +62,7 @@ class Match(models.Model):
         (ROUND2_LOSER, "Third Place play-off"),
         (ROUND2, "Final")
     )
+    match_set = models.ForeignKey(MatchSet, related_name="matches", on_delete=models.CASCADE)
     type = models.PositiveIntegerField(choices=MATCH_TYPES)
     home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE)
     away_team = models.ForeignKey(Team, related_name="away_team", on_delete=models.CASCADE)
@@ -91,7 +115,7 @@ class Match(models.Model):
 
             super(Match, self).save(*args, **kwargs)
 
-            Predict.update_predictions_for(self)
+            Predict.evaluate_predictions_for(self)
         else:
             super(Match, self).save(*args, **kwargs)
 
@@ -115,6 +139,13 @@ class MatchSummary(models.Model):
     oracles = models.PositiveIntegerField(default=0)
     nostradamuses = models.PositiveIntegerField(default=0)
     trelawneies = models.PositiveIntegerField(default=0)
+
+
+class MatchSetSummary(models.Model):
+    royals = models.PositiveIntegerField(default=0)
+    full_houses = models.PositiveIntegerField(default=0)
+    straights = models.PositiveIntegerField(default=0)
+    one_pairs = models.PositiveIntegerField(default=0)
 
 
 class Predict(models.Model):
@@ -195,26 +226,36 @@ class Predict(models.Model):
         super(Predict, self).save(*args, **kwargs)
 
     @staticmethod
-    def update_predictions_for(match):
-        predictions = Predict.objects.filter(match=match)
+    def evaluate_predictions_for(finished_match):
+        predictions = Predict.objects.filter(match=finished_match)
         for predict in predictions:
             predict.save()
             try:
-                score_obj = Score.objects.get(user=predict.user)
+                score_obj = Score.objects.get(user=predict.user, match_set=finished_match.match_set)
                 score_obj.num_predicted += 1
             except Score.DoesNotExist:
-                score_obj = Score(user=predict.user, num_predicted=1)
+                score_obj = Score(user=predict.user, match_set=finished_match.match_set, num_predicted=1)
             score_obj.value += predict.value()
             score_obj.save()
+        match_set_summary = finished_match.match_set.summary
+        match_set_summary.royals += finished_match.summary.royals
+        match_set_summary.full_houses += finished_match.summary.full_houses
+        match_set_summary.straights += finished_match.summary.straights
+        match_set_summary.one_pairs += finished_match.summary.one_pairs
+        match_set_summary.save()
 
     def __unicode__(self):
         return "%s-%s: %s-%s"%(self.user, self.match, self.home_result, self.away_result)
 
 
 class Score(models.Model):
+    match_set = models.ForeignKey(MatchSet, related_name="scores", on_delete=models.CASCADE)
     user = models.OneToOneField(User, related_name="score", on_delete=models.CASCADE)
     value = models.FloatField(default=0)
     num_predicted = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('match_set', 'user')
 
     def __unicode__(self):
         return "%s: %s" % (self.user, self.value)

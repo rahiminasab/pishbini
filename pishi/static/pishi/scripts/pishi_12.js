@@ -78,11 +78,13 @@
     $(document.body).on('click', '.match-set-card', function () {
         let route = $(this).attr("data-route");
         let cardsContainer = $(this).parents('.card-columns');
+        cardsContainer.hide();
+        $('.loading').show();
         let matchesContainer = $('#matches_container');
         $.get(route)
             .done(function (data) {
                 $('#initial-start-message-wrapper').hide();
-                cardsContainer.hide();
+                $('.loading').hide();
                 matchesContainer.html(data).show()
             });
     });

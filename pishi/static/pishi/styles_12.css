@@ -44,6 +44,13 @@ li:nth-child(odd) {
     margin-top: 20px;
 }
 
+.loading {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 40%;
+}
+
 #nav-tab {
     font-size: 1.2em;
 }

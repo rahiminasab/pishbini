@@ -8,6 +8,9 @@
                     <p class="lead">Start by choosing a Match Set from below.</p>
                 </div>
             </div>
+            <div class="loading">
+                <img src="{% static '/pishi/images/loading.gif' %}" />
+            </div>
             <div class="card-columns">
                 {% include 'match/match_set_cards.html' %}
             </div>

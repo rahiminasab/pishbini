@@ -46,7 +46,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                     </div>
-                                    <input id="{{ field.id_for_label }}" type="email" class="form-control" name="{{ field.html_name }}" placeholder="cat@piishi.com" required>
+                                    <input id="{{ field.id_for_label }}"
+                                           type="email" class="form-control"
+                                           name="{{ field.html_name }}"
+                                           placeholder="john@gmail.com" required>
                                 </div>
                             {% elif field.id_for_label == "id_password1" %}
                                 <div style="margin-bottom: 25px" class="input-group">

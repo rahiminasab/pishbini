@@ -204,6 +204,8 @@ class Predict(models.Model):
         return Badge.get_value(self.normal_badge) + Badge.get_value(self.exceptional_badge)
 
     def save(self, *args, **kwargs):
+        if not Score.objects.filter(user=self.user, match_set=self.match.match_set).exists():
+            Score.objects.create(user=self.user, match_set=self.match.match_set)
         if self.home_result != self.away_result:
             self.home_penalty = None
             self.away_penalty = None
@@ -260,7 +262,7 @@ class Predict(models.Model):
 
 class Score(models.Model):
     match_set = models.ForeignKey(MatchSet, related_name="scores", on_delete=models.CASCADE)
-    user = models.OneToOneField(User, related_name="score", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="scores", on_delete=models.CASCADE)
     value = models.FloatField(default=0)
     num_predicted = models.PositiveIntegerField(default=0)
 

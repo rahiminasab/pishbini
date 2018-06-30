@@ -24,3 +24,7 @@ def home(request):
     match_sets = MatchSet.objects.filter(finished=False).all()
 
     return render(request, "index.html", {"match_sets": match_sets})
+
+
+def rules(request):
+    return render(request, "rules.html")

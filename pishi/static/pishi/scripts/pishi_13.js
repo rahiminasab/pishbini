@@ -65,16 +65,6 @@
             });
     });
 
-    $(document.body).on('click', '#what_are_rules', function () {
-        $('.scores-list').hide();
-        $('.rules-container').show();
-    });
-
-    $(document.body).on('click', '#back_to_scores_icon', function () {
-        $('.rules-container').hide();
-        $('.scores-list').show();
-    });
-
     $(document.body).on('click', '.match-set-card', function () {
         let route = $(this).attr("data-route");
         let cardsContainer = $(this).parents('.card-columns');

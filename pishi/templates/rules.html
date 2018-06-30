@@ -17,7 +17,10 @@
                     {% include 'icons/royal.html' with extras='fa-2x' %}
                 </div>
                 <div class="col">
-                    <mark class="lead">Royal Badge</mark> has worth of <b>20</b> points. You deserve one when your prediction is exactly the same as match results.
+                    <mark class="lead">Royal Badge</mark> has worth of <b>20</b> points.
+                    You deserve one when your prediction is exactly the same as match results.
+                    In case of penalties, you will get this badge if you have predicted the exact number of scores
+                    that the winner achieves in penalties.
                 </div>
             </div>
         </li>
@@ -26,7 +29,11 @@
                 <div class="col-2 border-right text-center align-self-center">
                     {% include 'icons/full_house.html' with extras='fa-2x' %}
                 </div>
-                <div class="col"><mark class="lead">Full-House Badge</mark> has worth of <b>12</b> points. You deserve one when you had a correct prediction of goal difference.</div>
+                <div class="col"><mark class="lead">Full-House Badge</mark> has worth of <b>12</b> points.
+                    You deserve one when you had a correct prediction of goal difference.
+                    In case of penalties, you will get this badge only if you have predicted the winner correctly
+                    and also the goal difference of two teams in penalty scores.
+                </div>
             </div>
         </li>
         <li class="list-group-item">
@@ -34,7 +41,9 @@
                 <div class="col-2 border-right text-center align-self-center">
                     {% include 'icons/straight.html' with extras='fa-2x' %}
                 </div>
-                <div class="col"><mark class="lead">Straight Badge</mark> has worth of <b>8</b> points. You deserve one when you correctly predicted the outcome of the game.</div>
+                <div class="col"><mark class="lead">Straight Badge</mark> has worth of <b>8</b> points.
+                    You deserve one when you correctly predicted the outcome of the game.
+                </div>
             </div>
         </li>
         <li class="list-group-item">
@@ -78,6 +87,12 @@
             </div>
         </li>
     </ul>
-
+    <div class="row">
+        <div class="col">
+            <p class="lead">*For Fifa World cup, the score that you get in for a match in round <mark>i</mark> will
+            be multiplied by <mark>2<sup>i</sup></mark>. Round numbers start from 0.
+            </p>
+        </div>
+    </div>
 </div>
 

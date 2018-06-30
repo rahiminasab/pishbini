@@ -74,7 +74,8 @@ class Match(models.Model):
     finished = models.BooleanField(default=False)
     winner = models.ForeignKey(Team, null=True, blank=True)
     exceptional_badge = models.PositiveIntegerField(choices=Badge.exceptional_types, null=True, blank=True)
-    summary = models.OneToOneField("MatchSummary", related_name="match", on_delete=models.CASCADE, null=True, blank=True)
+    summary = models.OneToOneField("MatchSummary", related_name="match",
+                                   on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def due(self):
@@ -100,11 +101,11 @@ class Match(models.Model):
             if tot_count > 0:
                 err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
                 p_val = (tot_count-err_count)/float(tot_count)
-                if p_val < 0.2:
+                if p_val < 0.1:
                     self.exceptional_badge = Badge.ORACLE
-                elif p_val < 0.3:
+                elif p_val < 0.2:
                     self.exceptional_badge = Badge.NOSTRADAMUS
-                elif p_val < 0.4:
+                elif p_val < 0.3:
                     self.exceptional_badge = Badge.TRELAWNEY
                 else:
                     self.exceptional_badge = Badge.NOTHING
@@ -128,7 +129,7 @@ class Match(models.Model):
         return urlsafe_base64_decode(encoded_id)
 
     def __unicode__(self):
-        return "%s vs %s"%(self.home_team, self.away_team)
+        return "%s vs %s" % (self.home_team, self.away_team)
 
 
 class MatchSummary(models.Model):
@@ -176,14 +177,23 @@ class Predict(models.Model):
             return self.match.away_team
 
     def is_royal(self):
-        if self.home_result == self.match.home_result and self.away_result == self.match.away_result:
-            if self.match.home_penalty:
-                return self.home_penalty == self.match.home_penalty
-            return True
+        if self.is_straight():
+            if self.home_result == self.match.home_result and self.away_result == self.match.away_result:
+                if self.match.home_penalty and self.match.winner == self.match.home_team:
+                    return self.home_penalty == self.match.home_penalty
+                elif self.match.away_penalty and self.match.winner == self.match.away_team:
+                    return self.away_penalty == self.match.away_penalty
+                return True
         return False
 
     def is_full_house(self):
-        return self.home_result - self.away_result == self.match.home_result - self.match.away_result
+        if self.is_straight():
+            if self.home_result == self.away_result and self.match.home_result == self.match.away_result:
+                if self.match.home_penalty:
+                    return self.home_penalty - self.away_penalty == self.match.home_penalty - self.match.away_penalty
+                return True
+            return self.home_result - self.away_result == self.match.home_result - self.match.away_result
+        return False
 
     def is_straight(self):
         return self.winner == self.match.winner
@@ -235,7 +245,7 @@ class Predict(models.Model):
                 score_obj.num_predicted += 1
             except Score.DoesNotExist:
                 score_obj = Score(user=predict.user, match_set=finished_match.match_set, num_predicted=1)
-            score_obj.value += predict.value()
+            score_obj.value += predict.value() * (2**finished_match.type)
             score_obj.save()
         match_set_summary = finished_match.match_set.summary
         match_set_summary.royals += finished_match.summary.royals
@@ -245,7 +255,7 @@ class Predict(models.Model):
         match_set_summary.save()
 
     def __unicode__(self):
-        return "%s-%s: %s-%s"%(self.user, self.match, self.home_result, self.away_result)
+        return "%s-%s: %s-%s" % (self.user, self.match, self.home_result, self.away_result)
 
 
 class Score(models.Model):

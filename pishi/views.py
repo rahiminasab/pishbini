@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from models import *
-from match.forms import SoccerMatchPredictionForm
 
 
 @ensure_csrf_cookie
@@ -25,4 +24,3 @@ def home(request):
     match_sets = MatchSet.objects.filter(finished=False).all()
 
     return render(request, "index.html", {"match_sets": match_sets})
-

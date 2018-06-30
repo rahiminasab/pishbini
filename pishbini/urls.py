@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', core_views.index),
     url(r'^home/$', core_views.home, name='home'),
-    url(r'^rules', core_views.rules, name='rules')
+    url(r'^rules/$', core_views.rules, name='rules')
 ]
 
 urlpatterns.extend(registrar_urls.urlpatterns)

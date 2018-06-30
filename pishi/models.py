@@ -209,9 +209,9 @@ class Predict(models.Model):
         if self.home_result != self.away_result:
             self.home_penalty = None
             self.away_penalty = None
-
+        self.winner = self.get_winner()
         if not self.normal_badge and self.match.finished:
-            self.winner = self.get_winner()
+
             if self.is_royal():
                 self.normal_badge = Badge.ROYAL
                 self.match.summary.royals += 1

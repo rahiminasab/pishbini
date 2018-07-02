@@ -255,6 +255,8 @@ class Predict(models.Model):
                     self.match.summary.nostradamuses += 1
                 elif self.exceptional_badge == Badge.TRELAWNEY:
                     self.match.summary.trelawneies += 1
+            else:
+                self.exceptional_badge = Badge.NOTHING
             self.match.summary.save()
 
         super(Predict, self).save(*args, **kwargs)

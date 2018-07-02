@@ -123,7 +123,7 @@ class Match(models.Model):
             else:
                 self.exceptional_badge = Badge.NOTHING
 
-            if not self.summary.pk:
+            if self.summary is None or not self.summary.pk:
                 self.summary = MatchSummary.objects.create()
 
             super(Match, self).save(*args, **kwargs)

@@ -177,7 +177,7 @@ class Predict(models.Model):
     away_penalty = models.PositiveIntegerField(null=True, blank=True)
     winner = models.ForeignKey(Team, null=True, blank=False)
     normal_badge = models.PositiveIntegerField(choices=Badge.normal_types, null=True, blank=True)
-    penalty_badge = models.BooleanField(blank=True)
+    penalty_badge = models.BooleanField(default=False, blank=True)
     exceptional_badge = models.PositiveIntegerField(choices=Badge.exceptional_types, null=True, blank=True)
 
     class Meta:

@@ -31,7 +31,51 @@ urlpatterns.extend(registrar_urls.urlpatterns)
 urlpatterns.extend(match_urls.urlpatterns)
 
 # from pishi.models import *
-# matches = Match.objects.filter(date__range=["2018-06-30", "2018-07-02"])
+# match = Match.objects.get(id=53)
+#
+# predictions = match.predictions.all()
+# print 'num predicts before=', len(predictions)
+# for predict in predictions:
+#     score = Score.objects.get(match_set=match.match_set, user=predict.user)
+#     score.num_predicted -= 1
+#     score.value -= predict.value()
+#     score.save()
+#
+# match.finished = False
+# match.exceptional_badge = None
+# match.winner = match.get_winner_in_120()
+# match.match_set.summary.royals -= match.summary.royals
+# match.match_set.summary.full_houses -= match.summary.full_houses
+# match.match_set.summary.straights -= match.summary.straights
+# match.match_set.summary.one_pairs -= match.summary.one_pairs
+# match.match_set.summary.save()
+# match.summary.royals = 0
+# match.summary.full_houses = 0
+# match.summary.straights = 0
+# match.summary.one_pairs = 0
+# match.summary.oracles = 0
+# match.summary.trelawneies = 0
+# match.summary.nostradamuses = 0
+# match.summary.save()
+# match.save()
+#
+# predictions = match.predictions.all()
+# print 'num predicts after=', len(predictions)
+# for predict in predictions:
+#     predict.normal_badge = None
+#     predict.exceptional_badge = None
+#     predict.penalty_badge = False
+#     predict.winner = predict.get_winner_in_120()
+#     predict.save()
+#
+# match.finished = True
+# match.save()
+
+
+
+
+# matches = Match.objects.filter(date__range=["2018-07-02", "2018-07-04"])
+# print 'num matches', len(matches)
 # for match in matches:
 #     print 'num predicts before=', len(match.predictions.all())
 #     match.finished = False

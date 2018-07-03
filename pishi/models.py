@@ -224,8 +224,8 @@ class Predict(models.Model):
                (5 if self.penalty_badge else 0)
 
     def save(self, *args, **kwargs):
+        self.winner = self.get_winner_in_120()
         if not self.pk:
-            self.winner = self.get_winner_in_120()
             if not Score.objects.filter(user=self.user, match_set=self.match.match_set).exists():
                 Score.objects.create(user=self.user, match_set=self.match.match_set)
 

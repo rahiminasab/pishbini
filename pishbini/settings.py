@@ -26,7 +26,7 @@ SECRET_KEY = os.environ['DJANGO_PISHI_SECRET_KEY']
 DEBUG = False
 
 ALLOWED_HOSTS = ['www.piishi.com', 'rahiminasab.pythonanywhere.com', 'localhost', '127.0.0.1']
-
+SECURE_SSL_REDIRECT = True
 
 # Application definition
 

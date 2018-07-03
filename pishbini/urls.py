@@ -66,3 +66,13 @@ urlpatterns.extend(match_urls.urlpatterns)
 #
 # match.finished = True
 # match.save()
+
+# from pishi.models import *
+# matches = Match.objects.filter(date__gte=datetime.now())
+# if len(matches) == 4:
+#     for match in matches:
+#         print match, match.finished
+#         predictions = match.predictions.all()
+#         for p in predictions:
+#             p.save()
+

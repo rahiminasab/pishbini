@@ -1,0 +1,24 @@
+[
+  {
+    "model": "pishi.MatchSet",
+    "pk": 1,
+    "fields": {
+      "name": "Fifa WorldCup 2018",
+      "start_date": "2018-06-14",
+      "end_date": "2018-07-15",
+      "location": "Russia",
+      "finished": false,
+      "summary": 1
+    }
+  },
+  {
+    "model": "pishi.MatchSet",
+    "fields": {
+      "name": "Champion League 2018",
+      "start_date": "2018-08-14",
+      "end_date": "2019-05-15",
+      "location": "Europe",
+      "finished": false
+    }
+  }
+]

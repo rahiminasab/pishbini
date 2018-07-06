@@ -1,0 +1,82 @@
+[
+  {"model": "pishi.predict",
+    "pk": 11,
+    "fields": {
+      "user": 1, "match": 51, "home_result": 1, "away_result": 2,
+      "home_penalty": null, "away_penalty": null, "winner": 1,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 12,
+    "fields": {
+      "user": 2, "match": 51, "home_result": 1, "away_result": 2,
+      "home_penalty": null, "away_penalty": null, "winner": 1,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 13,
+    "fields": {
+      "user": 3, "match": 51, "home_result": 1, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": null,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 14,
+    "fields": {
+      "user": 4, "match": 51, "home_result": 2, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": 6,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 15,
+    "fields": {
+      "user": 5, "match": 51, "home_result": 1, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": null,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 16,
+    "fields": {
+      "user": 6, "match": 51, "home_result": 2, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": 6,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 17,
+    "fields": {
+      "user": 7, "match": 51, "home_result": 1, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": null,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 18,
+    "fields": {
+      "user": 8, "match": 51, "home_result": 2, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": 6,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 19,
+    "fields": {
+      "user": 9, "match": 51, "home_result": 1, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": null,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  },
+  {"model": "pishi.predict",
+    "pk": 20,
+    "fields": {
+      "user": 10, "match": 51, "home_result": 2, "away_result": 1,
+      "home_penalty": null, "away_penalty": null, "winner": 6,
+      "normal_badge": null, "penalty_badge": false, "exceptional_badge": null
+    }
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "model": "pishi.matchsetsummary",
+    "pk": 1,
+    "fields": {
+      "royals": 0,
+      "full_houses": 0,
+      "straights": 0,
+      "one_pairs": 0
+    }
+  }
+]

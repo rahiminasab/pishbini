@@ -82,9 +82,6 @@ class Match(models.Model):
         return datetime.now(pytz.UTC) >= self.date
 
     def get_winner_in_120(self):
-        if self.home_result is None or self.away_result is None:
-            raise ValueError("You cannot know who is winner of the match %s "
-                             "while you didn't input the final results" % self)
         if self.home_result > self.away_result:
             return self.home_team
         elif self.home_result == self.away_result:
@@ -93,6 +90,8 @@ class Match(models.Model):
             return self.away_team
 
     def has_penalty(self):
+        if self.get_winner_in_120():
+            return False
         return self.home_penalty is not None and self.away_penalty is not None
 
     def get_winner_in_penalty(self):
@@ -100,37 +99,52 @@ class Match(models.Model):
             return None
         if not self.has_penalty():
             raise ValueError("Match %s, does not lead into penalties, but you have requested for penalties." % self)
-        if self.home_penalty > self.away_penalty:
+        if self.home_penalty == self.away_penalty:
+            raise ValueError("Match %s, cannot lead to equal penalty points." % self)
+        elif self.home_penalty > self.away_penalty:
             return self.home_team
         else:
             return self.away_team
 
-    def save(self, *args, **kwargs):
-        if self.finished and self.exceptional_badge is None:
-            self.winner = self.get_winner_in_120()
-            tot_count = Predict.objects.filter(match=self).count()
-            if tot_count > 0:
-                err_count = Predict.objects.filter(match=self).exclude(winner=self.winner).count()
-                p_val = (tot_count - err_count) / float(tot_count)
-                if p_val < 0.1:
-                    self.exceptional_badge = Badge.ORACLE
-                elif p_val < 0.2:
-                    self.exceptional_badge = Badge.NOSTRADAMUS
-                elif p_val < 0.3:
-                    self.exceptional_badge = Badge.TRELAWNEY
-                else:
-                    self.exceptional_badge = Badge.NOTHING
+    def assign_exceptional_badge(self):
+        if not self.finished:
+            return
+        tot_count = self.predictions.count()
+        if tot_count > 0:
+            true_count = self.predictions.filter(winner=self.winner).count()
+            p_val = true_count / float(tot_count)
+            if p_val <= BadgeProbability.ORACLE:
+                self.exceptional_badge = Badge.ORACLE
+            elif p_val <= BadgeProbability.NOSTRADAMUS:
+                self.exceptional_badge = Badge.NOSTRADAMUS
+            elif p_val <= BadgeProbability.TRELAWNEY:
+                self.exceptional_badge = Badge.TRELAWNEY
             else:
                 self.exceptional_badge = Badge.NOTHING
-
-            if self.summary is None or not self.summary.pk:
-                self.summary = MatchSummary.objects.create()
-
-            super(Match, self).save(*args, **kwargs)
-
-            Predict.evaluate_predictions_for(self)
         else:
-            super(Match, self).save(*args, **kwargs)
+            self.exceptional_badge = Badge.NOTHING
+
+    def is_concluded(self):
+        return self.exceptional_badge is not None
+
+    def conclude(self):
+        if not self.finished or self.is_concluded():
+            return
+        self.winner = self.get_winner_in_120()
+        self.assign_exceptional_badge()
+        if self.summary is None or not self.summary.pk:
+            self.summary = MatchSummary.objects.create()
+        self.save()
+        Predict.conclude_predictions(self)
+
+    def save(self, *args, **kwargs):
+        if self.finished:
+            if self.home_result is None or self.away_result is None:
+                raise ValueError("You cannot know who is winner of the match %s "
+                                 "while you didn't input the final results" % self)
+            if not self.is_concluded():
+                self.conclude()
+        super(Match, self).save(*args, **kwargs)
 
     @property
     def encoded_id(self):
@@ -179,6 +193,7 @@ class Predict(models.Model):
     normal_badge = models.PositiveIntegerField(choices=Badge.normal_types, null=True, blank=True)
     penalty_badge = models.BooleanField(default=False, blank=True)
     exceptional_badge = models.PositiveIntegerField(choices=Badge.exceptional_types, null=True, blank=True)
+    concluded = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('user', 'match',)
@@ -195,33 +210,96 @@ class Predict(models.Model):
         else:
             return self.match.away_team
 
+    def has_penalty(self):
+        return self.home_penalty is not None and self.away_penalty is not None
+
     def get_winner_in_penalty(self):
         if self.get_winner_in_120():
             return None
-        if self.home_penalty is None or self.away_penalty is None:
-            raise ValueError("Predict %s, does not have a prediction of penalties, "
-                             "but you have requested for penalties winner." % self)
+        if not self.has_penalty():
+            raise ValueError("Prediction %s, does not include penalties, but you have requested for penalties." % self)
+        if self.home_penalty == self.away_penalty:
+            raise ValueError("Prediction %s, cannot lead to equal penalty points." % self)
+
         if self.home_penalty > self.away_penalty:
             return self.match.home_team
         else:
             return self.match.away_team
 
     def is_royal(self):
+        if not self.match.finished:
+            raise TypeError("match %s is not finished yet, so we cannot tell if %s is royal!" % (self.match, self))
         return self.home_result == self.match.home_result and self.away_result == self.match.away_result
 
     def is_full_house(self):
+        if not self.match.finished:
+            raise TypeError("match %s is not finished yet, so we cannot tell if %s is full house!" % (self.match, self))
         if self.is_straight():
             return self.home_result - self.away_result == self.match.home_result - self.match.away_result
         return False
 
     def is_straight(self):
+        if not self.match.finished:
+            raise TypeError("match %s is not finished yet, so we cannot tell if %s is straight!" % (self.match, self))
         return self.winner == self.match.winner
 
     def value(self):
-        if not self.match.finished:
+        if not self.concluded:
             return 0
         return Badge.get_value(self.normal_badge) + Badge.get_value(self.exceptional_badge) + \
-               (5 if self.penalty_badge else 0)
+               (BadgeScore.PENALTY if self.penalty_badge else 0)
+
+    def assign_normal_badge(self):
+        if not self.match.finished:
+            return
+        if self.is_royal():
+            self.normal_badge = Badge.ROYAL
+            self.match.summary.royals += 1
+        elif self.is_full_house():
+            self.normal_badge = Badge.FULL_HOUSE
+            self.match.summary.full_houses += 1
+        elif self.is_straight():
+            self.normal_badge = Badge.STRAIGHT
+            self.match.summary.straights += 1
+        else:
+            self.normal_badge = Badge.ONE_PAIR
+            self.match.summary.one_pairs += 1
+
+    def assign_penalty_badge(self):
+        if self.winner is not None or not self.match.has_penalty():
+            return
+        if self.get_winner_in_penalty() == self.match.get_winner_in_penalty():
+            self.penalty_badge = True
+
+    def assign_exceptional_badge(self):
+        if not self.is_straight():
+            self.exceptional_badge = Badge.NOTHING
+            return
+
+        self.exceptional_badge = self.match.exceptional_badge
+
+        if self.exceptional_badge == Badge.ORACLE:
+            self.match.summary.oracles += 1
+        elif self.exceptional_badge == Badge.NOSTRADAMUS:
+            self.match.summary.nostradamuses += 1
+        elif self.exceptional_badge == Badge.TRELAWNEY:
+            self.match.summary.trelawneies += 1
+
+    def conclude(self):
+        if self.concluded or not self.match.finished:
+            return
+        self.winner = self.get_winner_in_120()
+        self.assign_normal_badge()
+        self.assign_penalty_badge()
+        self.assign_exceptional_badge()
+        self.match.summary.save()
+        self.concluded = True
+        self.save()
+
+        score_obj = Score.objects.get(user=self.user, match_set=self.match.match_set)
+        score_obj.num_predicted += 1
+        score_obj.value += self.value()
+        score_obj.save()
 
     def save(self, *args, **kwargs):
         self.winner = self.get_winner_in_120()
@@ -229,56 +307,21 @@ class Predict(models.Model):
             if not Score.objects.filter(user=self.user, match_set=self.match.match_set).exists():
                 Score.objects.create(user=self.user, match_set=self.match.match_set)
 
-        if self.normal_badge is None and self.match.finished:
-            if self.is_royal():
-                self.normal_badge = Badge.ROYAL
-                self.match.summary.royals += 1
-            elif self.is_full_house():
-                self.normal_badge = Badge.FULL_HOUSE
-                self.match.summary.full_houses += 1
-            elif self.is_straight():
-                self.normal_badge = Badge.STRAIGHT
-                self.match.summary.straights += 1
-            else:
-                self.normal_badge = Badge.ONE_PAIR
-                self.match.summary.one_pairs += 1
-
-            if self.winner is None and self.match.has_penalty():
-                if self.get_winner_in_penalty() == self.match.get_winner_in_penalty():
-                    self.penalty_badge = True
-
-            if self.is_straight():
-                self.exceptional_badge = self.match.exceptional_badge
-                if self.exceptional_badge == Badge.ORACLE:
-                    self.match.summary.oracles += 1
-                elif self.exceptional_badge == Badge.NOSTRADAMUS:
-                    self.match.summary.nostradamuses += 1
-                elif self.exceptional_badge == Badge.TRELAWNEY:
-                    self.match.summary.trelawneies += 1
-            else:
-                self.exceptional_badge = Badge.NOTHING
-            self.match.summary.save()
-
         super(Predict, self).save(*args, **kwargs)
 
     @staticmethod
-    def evaluate_predictions_for(finished_match):
+    def conclude_predictions(finished_match):
         predictions = Predict.objects.filter(match=finished_match)
         for predict in predictions:
-            predict.save()
-            try:
-                score_obj = Score.objects.get(user=predict.user, match_set=finished_match.match_set)
-                score_obj.num_predicted += 1
-            except Score.DoesNotExist:
-                score_obj = Score(user=predict.user, match_set=finished_match.match_set, num_predicted=1)
-            val = predict.value()
-            score_obj.value += val
-            score_obj.save()
+            predict.conclude()
+
         match_set_summary = finished_match.match_set.summary
-        match_set_summary.royals += finished_match.summary.royals
-        match_set_summary.full_houses += finished_match.summary.full_houses
-        match_set_summary.straights += finished_match.summary.straights
-        match_set_summary.one_pairs += finished_match.summary.one_pairs
+        match_summary = finished_match.summary
+        match_summary.refresh_from_db()
+        match_set_summary.royals += match_summary.royals
+        match_set_summary.full_houses += match_summary.full_houses
+        match_set_summary.straights += match_summary.straights
+        match_set_summary.one_pairs += match_summary.one_pairs
         match_set_summary.save()
 
     def __unicode__(self):

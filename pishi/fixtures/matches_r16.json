@@ -1,6 +1,7 @@
 [
   {
       "model": "pishi.Match",
+      "pk": 49,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -12,6 +13,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 50,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -23,6 +25,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 51,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -34,6 +37,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 52,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -45,6 +49,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 53,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -56,6 +61,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 54,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -67,6 +73,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 55,
       "fields": {
         "type": 1,
         "match_set": 1,
@@ -78,6 +85,7 @@
   },
   {
       "model": "pishi.Match",
+      "pk": 56,
       "fields": {
         "type": 1,
         "match_set": 1,

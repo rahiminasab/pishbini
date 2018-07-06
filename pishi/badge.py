@@ -40,6 +40,16 @@ class Badge(object):
             return BadgeScore.TRELAWNEY
         return 0
 
+    @staticmethod
+    def get_probability(badge):
+        if badge == Badge.ORACLE:
+            return BadgeProbability.ORACLE
+        if badge == Badge.NOSTRADAMUS:
+            return BadgeProbability.NOSTRADAMUS
+        if badge == Badge.TRELAWNEY:
+            return BadgeProbability.TRELAWNEY
+        return BadgeProbability.ALL
+
     index_dict = {
         "ROYAL": ROYAL,
         "FULL_HOUSE": FULL_HOUSE,
@@ -59,3 +69,11 @@ class BadgeScore(object):
     ORACLE = 20
     NOSTRADAMUS = 15
     TRELAWNEY = 10
+    PENALTY = 5
+
+
+class BadgeProbability(object):
+    ORACLE = 0.1
+    NOSTRADAMUS = 0.2
+    TRELAWNEY = 0.3
+    ALL = 1

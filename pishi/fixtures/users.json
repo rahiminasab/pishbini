@@ -1,0 +1,101 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "garfield",
+      "first_name": "Garfield",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "tom",
+      "first_name": "Tom",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "sylvester",
+      "first_name": "Sylvester",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "username": "felix",
+      "first_name": "Felix",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "username": "kitti",
+      "first_name": "Kitti",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "username": "heathcliff",
+      "first_name": "Heathcliff",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "username": "nermal",
+      "first_name": "Nermal",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "username": "figaro",
+      "first_name": "Figaro",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "username": "mr.jinx",
+      "first_name": "Mr.Jinx",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "username": "lucifer",
+      "first_name": "Lucifer",
+      "email": "piishi.com@gmail.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "username": "stimpy",
+      "first_name": "Stimpy",
+      "email": "piishi.com@gmail.com"
+    }
+  }
+]

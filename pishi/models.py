@@ -4,11 +4,56 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from datetime import datetime
 import pytz
 
 from badge import *
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
+    match_sets = models.ManyToManyField("MatchSet", related_name="participants", through="Participation")
+    royals = models.PositiveIntegerField(default=0)
+    full_houses = models.PositiveIntegerField(default=0)
+    straights = models.PositiveIntegerField(default=0)
+    one_pairs = models.PositiveIntegerField(default=0)
+    oracles = models.PositiveIntegerField(default=0)
+    nostradamuses = models.PositiveIntegerField(default=0)
+    trelawneies = models.PositiveIntegerField(default=0)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    class Meta:
+        db_table = "pi_profile"
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
+class Participation(models.Model):
+    profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
+    match_set = models.ForeignKey("MatchSet", on_delete=models.CASCADE)
+    royals = models.PositiveIntegerField(default=0)
+    full_houses = models.PositiveIntegerField(default=0)
+    straights = models.PositiveIntegerField(default=0)
+    one_pairs = models.PositiveIntegerField(default=0)
+    oracles = models.PositiveIntegerField(default=0)
+    nostradamuses = models.PositiveIntegerField(default=0)
+    trelawneies = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        db_table = "pi_participation"
+        unique_together = ('profile', 'match_set',)
 
 
 class Team(models.Model):
@@ -285,6 +330,35 @@ class Predict(models.Model):
         elif self.exceptional_badge == Badge.TRELAWNEY:
             self.match.summary.trelawneies += 1
 
+    def update_participation(self):
+        profile_obj = self.user.profile
+        participation_obj = profile_obj.participation_set.get(match_set=self.match.match_set)
+        if self.normal_badge == Badge.ROYAL:
+            participation_obj.royals += 1
+            profile_obj.royals += 1
+        elif self.normal_badge == Badge.FULL_HOUSE:
+            participation_obj.full_houses += 1
+            profile_obj.full_houses += 1
+        elif self.normal_badge == Badge.STRAIGHT:
+            participation_obj.straights += 1
+            profile_obj.straights += 1
+        elif self.normal_badge == Badge.ONE_PAIR:
+            participation_obj.one_pairs += 1
+            profile_obj.one_pairs += 1
+
+        if self.exceptional_badge == Badge.ORACLE:
+            participation_obj.oracles += 1
+            profile_obj.oracles += 1
+        elif self.exceptional_badge == Badge.NOSTRADAMUS:
+            participation_obj.nostradamuses += 1
+            profile_obj.nostradamuses += 1
+        elif self.exceptional_badge == Badge.TRELAWNEY:
+            participation_obj.trelawneies += 1
+            profile_obj.trelawneies += 1
+
+        participation_obj.save()
+        profile_obj.save()
+
     def conclude(self):
         if self.concluded or not self.match.finished:
             return
@@ -293,6 +367,7 @@ class Predict(models.Model):
         self.assign_penalty_badge()
         self.assign_exceptional_badge()
         self.match.summary.save()
+        self.update_participation()
         self.concluded = True
         self.save()
 
@@ -306,6 +381,9 @@ class Predict(models.Model):
         if not self.pk:
             if not Score.objects.filter(user=self.user, match_set=self.match.match_set).exists():
                 Score.objects.create(user=self.user, match_set=self.match.match_set)
+            if not self.user.profile.match_sets.filter(pk=self.match.match_set.pk).exists():
+                self.user.profile.participation_set.add(Participation.objects.create(profile=self.user.profile,
+                                                                                     match_set=self.match.match_set))
 
         super(Predict, self).save(*args, **kwargs)
 

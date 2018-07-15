@@ -195,3 +195,7 @@ li:nth-child(odd) {
         column-count: 2;
     }
 }
+
+#lucky_dog_img {
+    width: 50%;
+}

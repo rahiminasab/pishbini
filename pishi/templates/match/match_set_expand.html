@@ -14,6 +14,15 @@
            role="tab"
            aria-controls="nav-scoreboard"
            aria-selected="false">ScoreBoard</a>
+        {% if match_set.lucky_dog %}
+            <a class="nav-item nav-link"
+               id="nav-lucky-dog-tab"
+               data-toggle="tab"
+               href="#lucky_dog"
+               role="tab"
+               aria-controls="nav-lucky-dog"
+               aria-selected="false">Lucky Dog</a>
+        {% endif %}
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
@@ -23,4 +32,9 @@
     <div style="display: none" id="scoreboard" class="tab-pain fade" role="tabpanel" aria-labelledby="nav-scoreboard-tab">
         {% include 'scoreboard.html' %}
     </div>
+    {% if match_set.lucky_dog %}
+        <div style="display: none" id="lucky_dog" class="tab-pain fade" role="tabpanel" aria-labelledby="nav-lucky-dog-tab">
+            {% include 'match/lucky_dog.html' with dog=match_set.lucky_dog %}
+        </div>
+    {% endif %}
 </div>

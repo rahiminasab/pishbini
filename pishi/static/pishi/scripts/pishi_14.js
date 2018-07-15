@@ -19,12 +19,20 @@
 
     $(document.body).on('click', '#nav-predictions-tab', function () {
         $('#scoreboard').hide();
+        $('#lucky_dog').hide();
         $('#predictions').show();
     });
 
     $(document.body).on('click', '#nav-scoreboard-tab', function () {
         $('#predictions').hide();
+        $('#lucky_dog').hide();
         $('#scoreboard').show();
+    });
+
+    $(document.body).on('click', '#nav-lucky-dog-tab', function () {
+        $('#predictions').hide();
+        $('#scoreboard').hide();
+        $('#lucky_dog').show();
     });
 
     $(document.body).on('click', '.show-prediction-form-btn', function () {

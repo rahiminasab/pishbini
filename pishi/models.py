@@ -8,6 +8,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from datetime import datetime
 import pytz
 
+import random
+
 from badge import *
 
 
@@ -34,6 +36,7 @@ class MatchSet(models.Model):
     flag = models.URLField(null=True)
     summary = models.OneToOneField("MatchSetSummary", related_name="match_set", on_delete=models.CASCADE, null=True,
                                    blank=True)
+    lucky_dog = models.ForeignKey(User, null=True, blank=True)
 
     @property
     def encoded_id(self):
@@ -42,6 +45,21 @@ class MatchSet(models.Model):
     @staticmethod
     def decode_id(encoded_id):
         return urlsafe_base64_decode(encoded_id)
+
+    def find_lucky_dog(self):
+        scores = Score.objects.filter(match_set=self)
+        users = []
+        for score in scores:
+            if score.value > 0:
+                for i in range(score.num_predicted):
+                    users.append(score.user)
+
+        return random.choice(users)
+
+    def save(self, *args, **kwargs):
+        if self.finished:
+            self.lucky_dog = self.find_lucky_dog()
+        super(MatchSet, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name

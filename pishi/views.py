@@ -21,7 +21,7 @@ def home(request):
         import registrar.views as registrar
         return registrar.user_activation_required(request)
 
-    match_sets = MatchSet.objects.filter(finished=False).all()
+    match_sets = MatchSet.objects.all()
 
     return render(request, "index.html", {"match_sets": match_sets})
 

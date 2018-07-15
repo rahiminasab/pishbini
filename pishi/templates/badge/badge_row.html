@@ -1,0 +1,51 @@
+<div class="row text-muted">
+    <div class="col d-inline-flex justify-content-center">
+        {% if info_obj.royals > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/royal.html' %}
+                <sub><small>{{ info_obj.royals }}</small></sub>
+            </div>
+        {% endif %}
+        {% if info_obj.full_houses > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/full_house.html' %}
+                <sub><small>{{ info_obj.full_houses }}</small></sub>
+            </div>
+        {% endif %}
+        {% if info_obj.straights > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/straight.html' %}
+                <sub><small>{{ info_obj.straights }}</small></sub>
+            </div>
+        {% endif %}
+        {% if info_obj.one_pairs > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/one_pair.html' %}
+                <sub><small>{{ info_obj.one_pairs }}</small></sub>
+            </div>
+        {% endif %}
+        {% if info_obj.oracles > 0 or nostradamuses > 0 or trelawneies > 0  %}
+            <div style="width: 10px;" class="border-right">
+
+            </div>
+        {% endif %}
+        {% if info_obj.oracles > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/oracle.html' %}
+                <sub><small>{{ info_obj.oracles }}</small></sub>
+            </div>
+        {% endif %}
+        {% if info_obj.nostradamuses > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/nostradamus.html' %}
+                <sub><small>{{ info_obj.nostradamuses }}</small></sub>
+            </div>
+        {% endif %}
+        {% if info_obj.trelawneies > 0 %}
+            <div class="badge-icon-in-row">
+                {% include 'badge/trelawney.html' %}
+                <sub><small>{{ info_obj.trelawneies }}</small></sub>
+            </div>
+        {% endif %}
+    </div>
+</div>

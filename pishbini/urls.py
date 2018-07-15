@@ -19,6 +19,7 @@ from django.contrib import admin
 from pishi import views as core_views
 from pishi.registrar import urls as registrar_urls
 from pishi.match import urls as match_urls
+from pishi.profile import urls as profile_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,6 +30,7 @@ urlpatterns = [
 
 urlpatterns.extend(registrar_urls.urlpatterns)
 urlpatterns.extend(match_urls.urlpatterns)
+urlpatterns.extend(profile_urls.urlpatterns)
 
 
 # from pishi.models import *

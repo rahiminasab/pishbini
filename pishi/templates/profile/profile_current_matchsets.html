@@ -1,0 +1,8 @@
+<!-- Flickity HTML init -->
+<div class="carousel" data-flickity data-flickity-options='{ "cellAlign": "left", "contain": true, "pageDots": false }'>
+    {% for participation in participations %}
+        <div class="carousel-cell">
+            {% include 'match/match_set_card.html' with match_set=participation.match_set info_obj=participation %}
+        </div>
+    {% endfor %}
+</div>

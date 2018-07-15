@@ -46,55 +46,5 @@
 </div>
 
 {% if match.summary %}
-    <div class="row match-list-item-info text-muted">
-        <div class="col d-inline-flex justify-content-center">
-            {% if match.summary.royals > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/royal.html' %}
-                    <sub><small>{{ match.summary.royals }}</small></sub>
-                </div>
-            {% endif %}
-            {% if match.summary.full_houses > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/full_house.html' %}
-                    <sub><small>{{ match.summary.full_houses }}</small></sub>
-                </div>
-            {% endif %}
-            {% if match.summary.straights > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/straight.html' %}
-                    <sub><small>{{ match.summary.straights }}</small></sub>
-                </div>
-            {% endif %}
-            {% if match.summary.one_pairs > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/one_pair.html' %}
-                    <sub><small>{{ match.summary.one_pairs }}</small></sub>
-                </div>
-            {% endif %}
-            {% if match.summary.oracles > 0 or match.summary.nostradamuses > 0 or match.summary.trelawneies > 0  %}
-                <div style="width: 10px;" class="border-right">
-
-                </div>
-            {% endif %}
-            {% if match.summary.oracles > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/oracle.html' %}
-                    <sub><small>{{ match.summary.oracles }}</small></sub>
-                </div>
-            {% endif %}
-            {% if match.summary.nostradamuses > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/nostradamus.html' %}
-                    <sub><small>{{ match.summary.nostradamuses }}</small></sub>
-                </div>
-            {% endif %}
-            {% if match.summary.trelawneies > 0 %}
-                <div class="match-summary-icon">
-                    {% include 'icons/trelawney.html' %}
-                    <sub><small>{{ match.summary.trelawneies }}</small></sub>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+    {% include 'badge/badge_row.html' with info_obj=match.summary %}
 {% endif %}

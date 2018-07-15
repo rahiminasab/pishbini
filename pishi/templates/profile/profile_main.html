@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'profile/profile_header.html' %}
+    {% include 'profile/profile_current_matchsets.html' with participations=profile.participation_set.all %}
+{% endblock %}

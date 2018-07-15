@@ -1,95 +1,91 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="row justify-content-center content-wrapper">
-        <div class="rules-container col-lg-8">
+    <div class="row">
+        <div class="col">
+            <p class="lead">Your score for each prediction is based on the following simple rules:</p>
+        </div>
+    </div>
+    <ul class="list-group rules-list">
+        <li class="list-group-item">
             <div class="row">
-                <div class="col">
-                    <p class="lead">Your score for each prediction is based on the following simple rules:</p>
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/royal.html' with extras='fa-2x' %}
+                </div>
+                <div class="col text-justify">
+                    <mark class="lead">Royal Badge</mark> has worth of <b>20</b> points.
+                    You deserve one when your prediction is exactly the same as match results till 120 mins.
                 </div>
             </div>
-            <ul class="list-group rules-list">
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/royal.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify">
-                            <mark class="lead">Royal Badge</mark> has worth of <b>20</b> points.
-                            You deserve one when your prediction is exactly the same as match results till 120 mins.
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/full_house.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify"><mark class="lead">Full-House Badge</mark> has worth of <b>12</b> points.
-                            You deserve one when you had a correct prediction of goal difference till 120 mins.
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/straight.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify"><mark class="lead">Straight Badge</mark> has worth of <b>8</b> points.
-                            You deserve one when you correctly predicted the outcome of the game till 120 mins.
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/one_pair.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify"><mark class="lead">One-Pair Badge</mark> has worth of <b>2</b> points.You deserve one when you just had a prediction for a match.</div>
-                    </div>
-                </li>
-            </ul>
+        </li>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/full_house.html' with extras='fa-2x' %}
+                </div>
+                <div class="col text-justify"><mark class="lead">Full-House Badge</mark> has worth of <b>12</b> points.
+                    You deserve one when you had a correct prediction of goal difference till 120 mins.
+                </div>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/straight.html' with extras='fa-2x' %}
+                </div>
+                <div class="col text-justify"><mark class="lead">Straight Badge</mark> has worth of <b>8</b> points.
+                    You deserve one when you correctly predicted the outcome of the game till 120 mins.
+                </div>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/one_pair.html' with extras='fa-2x' %}
+                </div>
+                <div class="col text-justify"><mark class="lead">One-Pair Badge</mark> has worth of <b>2</b> points.You deserve one when you just had a prediction for a match.</div>
+            </div>
+        </li>
+    </ul>
 
+    <div class="row">
+        <div class="col text-justify">
+            <p class="lead">Your prediction may deserve one of the following exceptional badges:</p>
+        </div>
+    </div>
+    <ul class="list-group rules-list">
+        <li class="list-group-item">
             <div class="row">
-                <div class="col text-justify">
-                    <p class="lead">Your prediction may deserve one of the following exceptional badges:</p>
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/oracle.html' with extras='fa-2x' %}
                 </div>
+                <div class="col text-justify"><mark class="lead">Oracle Badge</mark> has worth of <b>20</b> points.
+                    You deserve one when you had an extremely rare but true prediction.</div>
             </div>
-            <ul class="list-group rules-list">
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/oracle.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify"><mark class="lead">Oracle Badge</mark> has worth of <b>20</b> points.
-                            You deserve one when you had an extremely rare but true prediction.</div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/nostradamus.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify"><mark class="lead">Nostradamus Badge</mark> has worth of <b>15</b> points.
-                            You deserve one when you had a very rare but true prediction.</div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-2 border-right text-center align-self-center">
-                            {% include 'icons/trelawney.html' with extras='fa-2x' %}
-                        </div>
-                        <div class="col text-justify"><mark class="lead">Trelawney Badge</mark> has worth of <b>10</b> points.
-                            You deserve one when you had a rare but true prediction.</div>
-                    </div>
-                </li>
-            </ul>
+        </li>
+        <li class="list-group-item">
             <div class="row">
-                <div class="col text-justify">
-                    <p class="lead">*In case of <mark>penalties</mark>, if you had predicted penalties for a match and your prediction
-                        of the winner was correct, you will get <b>5</b> extra points.
-                    </p>
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/nostradamus.html' with extras='fa-2x' %}
                 </div>
+                <div class="col text-justify"><mark class="lead">Nostradamus Badge</mark> has worth of <b>15</b> points.
+                    You deserve one when you had a very rare but true prediction.</div>
             </div>
+        </li>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-2 border-right text-center align-self-center">
+                    {% include 'badge/trelawney.html' with extras='fa-2x' %}
+                </div>
+                <div class="col text-justify"><mark class="lead">Trelawney Badge</mark> has worth of <b>10</b> points.
+                    You deserve one when you had a rare but true prediction.</div>
+            </div>
+        </li>
+    </ul>
+    <div class="row">
+        <div class="col text-justify">
+            <p class="lead">*In case of <mark>penalties</mark>, if you had predicted penalties for a match and your prediction
+                of the winner was correct, you will get <b>5</b> extra points.
+            </p>
         </div>
     </div>
 {% endblock %}

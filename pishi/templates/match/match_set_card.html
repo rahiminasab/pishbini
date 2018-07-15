@@ -1,0 +1,16 @@
+<div data-route="/match-set/{{ match_set.encoded_id }}" class="card bg-light border-secondary match-set-card">
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <img style="max-width: 130px;" class="card-img-top" src="{{ match_set.flag }}" alt="Card image cap">
+        </div>
+    </div>
+    <div class="card-body match-set-info">
+      <h5 class="card-title">{{ match_set.name }}</h5>
+      <p class="card-text">
+          {{ match_set.location }} ({{ match_set.start_date }}-{{ match_set.end_date }})
+      </p>
+    </div>
+    <div class="card-footer">
+        {% include 'badge/badge_row.html' with info_obj=info_obj %}
+    </div>
+</div>

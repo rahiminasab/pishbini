@@ -67,16 +67,7 @@
 
     $(document.body).on('click', '.match-set-card', function () {
         let route = $(this).attr("data-route");
-        let cardsContainer = $(this).parents('.card-columns');
-        cardsContainer.hide();
-        $('.loading').show();
-        let matchesContainer = $('#matches_container');
-        $.get(route)
-            .done(function (data) {
-                $('#initial-start-message-wrapper').hide();
-                $('.loading').hide();
-                matchesContainer.html(data).show()
-            });
+        window.location.replace(route);
     });
 
     $(document.body).on('click', '.match-list-header i', function () {
@@ -97,6 +88,10 @@
             $(this).find('.card-title').css("color", card_colors[i%card_colors.length]["title-c"]);
         });
 
+    $(window).ready(function() {
+        $('.loading').hide();
+    });
+
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
@@ -105,4 +100,5 @@
             }
         }
     });
+
 })();

@@ -13,8 +13,13 @@ import pytz
 from badge import *
 
 
+def user_directory_path(instance, filename):
+    return "user_{0}/{1}".format(instance.user.id, filename)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
     match_sets = models.ManyToManyField("MatchSet", related_name="participants", through="Participation")
     royals = models.PositiveIntegerField(default=0)
     full_houses = models.PositiveIntegerField(default=0)

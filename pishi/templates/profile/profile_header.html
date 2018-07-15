@@ -1,0 +1,18 @@
+<div class="row profile-info">
+    <div class="col">
+        <div class="row">
+            <div class="col text-center">
+                <i class="fas fa-user-circle missing-photo-icon">
+                    <i class="fas fa-camera profile-picture-upload-icon"></i>
+                </i>
+            </div>
+        </div>
+        <div class="row profile-info-fullname">
+            <div class="col text-center">
+                {{ profile.user.get_full_name }}
+            </div>
+        </div>
+        {% include 'badge/badge_row.html' with info_obj=profile %}
+    </div>
+</div>
+
